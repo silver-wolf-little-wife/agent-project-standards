@@ -1072,7 +1072,7 @@ When creating and publishing a brand-new open-source project from scratch:
 1. Initialize git repo: git init && git checkout -b main
 2. Set up .gitignore for your language/ecosystem
 3. Add LICENSE file (see License Guide section)
-4. Write README.md:
+4. Write README.md (default language: English):
    - Project name and one-line description
    - Installation / quickstart instructions
    - Usage examples
@@ -1084,7 +1084,7 @@ When creating and publishing a brand-new open-source project from scratch:
    - Rust: rustfmt.toml + clippy config
    - Go: golangci.yml
    - Other: ecosystem-appropriate tooling
-7. Add CONTRIBUTING.md with:
+7. Add CONTRIBUTING.md (default language: English) with:
    - How to set up the dev environment
    - How to run tests
    - Commit message format (Conventional Commits recommended)
