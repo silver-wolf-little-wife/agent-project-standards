@@ -711,6 +711,33 @@ If the project enforces a specific merge strategy via branch protection rules, f
 
 **Prerequisite: Step 5 result is "match" AND Step 6 has been executed. Otherwise, skip this step.**
 
+> **⚠️ 强制规则：所有权验证通过后，必须检查本次修改是否影响了上一个 Release 的 assets 中包含的文件。如果影响了，必须强制发布新 Release。**
+>
+> **⚠️ MANDATORY: After ownership verification passes, you MUST check whether the current changes affect any files included in the previous Release's assets. If affected, a new Release MUST be published.**
+
+### 检测本次修改是否影响 Release Assets（强制） / Detect Whether Changes Affect Release Assets (MANDATORY)
+
+所有权验证通过后，在执行发布前，必须先判断本次变更是否修改了上一个 Release 的 assets 中包含的源文件：
+
+After ownership verification passes and before publishing, you must first determine whether the current changes modified any source files included in the previous Release's assets:
+
+```bash
+# 1. 获取本次变更涉及的文件（合并后在 main 上执行）/ Get files changed in this update (run on main after merge)
+git diff HEAD~1 --name-only
+
+# 2. 查看上一个 Release 的 assets 列表 / View the previous Release's assets list
+gh release view --json assets --jq ".assets[].name"
+```
+
+**判定规则 / Decision Rules：**
+
+- 如果本次变更修改的文件属于上一个 Release assets 中的产物源文件（如 `.zip`、`.tar.gz` 等打包产物所包含的源文件） → **必须发布新 Release，不可跳过**
+- If the changed files are source files included in the previous Release's asset artifacts (e.g., source files packaged into `.zip`, `.tar.gz`, etc.) → **A new Release MUST be published, no skipping**
+- 如果本次变更未涉及 assets 中的文件（如仅修改了 CI 配置、`.gitignore`、与产物无关的文档等） → 可跳过发布
+- If the changes did not affect any asset files (e.g., only CI config, `.gitignore`, or docs unrelated to artifacts) → Publishing may be skipped
+
+**常见触发场景 / Common trigger scenarios：** 项目的 `SKILL.md`、`LICENSE` 等被打包进 Release 的 `.zip` 产物中，修改这些文件即触发强制发布。 / Files like `SKILL.md`, `LICENSE` that are packaged into the Release's `.zip` artifacts — modifying these files triggers a mandatory release.
+
 ### 检查之前发布的 Assets（创建新 Release 前必须执行） / Check Previous Release Assets (MANDATORY Before Creating New Release)
 
 > **在创建新 Release 之前，必须先查询之前发布的 assets 列表，确保新 Release 不会遗漏任何预期的产物。**
@@ -821,6 +848,7 @@ gh release view vX.Y.Z --json assets --jq ".assets[].name"
 - [ ] 行尾符合项目规范 / Line endings match project convention
 - [ ] 已使用 --body-file 创建 PR / PR created with --body-file
 - [ ] 已执行所有权验证（步骤 5）/ Ownership verification executed (Step 5)
+- [ ] 已检测本次修改是否影响上一个 Release 的 assets 文件（影响则强制发布）/ Checked whether current changes affect previous Release assets (mandatory release if affected)
 - [ ] 已检查之前 Release 的 assets 列表 / Previous Release assets list checked
 - [ ] 所有权匹配：已合并 PR、已创建 Release、已上传资产 / Ownership match: PR merged, Release created, assets uploaded
 - [ ] 已验证新 Release 的 assets 与之前 Release 一致（数量和内容）/ New Release assets verified against previous releases (count and content)
@@ -840,6 +868,7 @@ gh release view vX.Y.Z --json assets --jq ".assets[].name"
 | 误在他人的仓库上合并/发布 / Accidentally merge/release on someone else's repo | 跳过了所有权检查 / Skipped ownership check | 必须执行步骤 5 / Must execute Step 5 |
 | 版本号更新错误 / Wrong version bump | 忽略了项目的版本控制策略 / Ignored project's versioning strategy | 从现有标签检测策略 / Detect strategy from existing tags |
 | 新 Release 遗漏 assets / New Release missing assets | 未检查之前 Release 的 assets 列表 / Didn't check previous release's assets list | 发布前用 `gh release view --json assets` 对比 / Compare with `gh release view --json assets` before release |
+| 修改了 assets 源文件但未发新 Release / Modified asset source files without new Release | 未执行资产变更检测 / Skipped asset change detection | 所有权通过后必须执行 `git diff HEAD~1 --name-only` 对比 assets 文件 / After ownership passes, MUST run `git diff HEAD~1 --name-only` to compare with asset files |
 | 本地分支未清理 / Local branches not cleaned up | 只删除了远程分支，忘记删除本地分支 / Only deleted remote branch, forgot local | 合并后立即执行 `git branch -d <branch>` / Run `git branch -d <branch>` immediately after merge |/n/n---
 
 # 开源许可证指南 / Open-Source License Guide
