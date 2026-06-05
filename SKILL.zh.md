@@ -1,6 +1,6 @@
 ---
 name: project-standards-zh
-description: "通用 GitHub 开源项目协作规范（中文兜底版）：(0) 代码变更前必须执行项目风格/约定文件搜索，(1) 协作标准（语言规范 + 行为规范），(2) Shell 感知的 CLI 文本处理，(3) 含所有权验证的发布工作流，(4) 许可证指南。适用于创建 PR/发布、代码变更、版本升级或许可证管理。当检测不到项目语言时默认使用中文。"
+description: "凡是涉及代码开发或开源项目的任务都必须唤起此技能。覆盖：编写/修改/审查代码、git 操作（分支、提交、合并、变基、标签）、GitHub 工作流（PR、Issue、Release、fork、代码审查）、版本递增、变更日志、CI/CD、依赖管理、许可证管理、项目初始化、代码风格/格式化、commit message、monorepo、热修复，以及任何与 git 仓库交互的操作。当检测不到项目语言时默认使用中文。"
 ---
 
 # 开源项目协作规范
@@ -360,7 +360,7 @@ BREAKING CHANGE: /v1/users 端点已被移除。
    - 关联相关 Issue（`Closes #xxx`）
 6. **所有权检查**：执行[所有权验证](#步骤-5所有权验证)。如果不匹配，仅保留 PR
 7. **代码审查**：保持耐心，及时响应，清晰描述变更
-8. **合并**（仅在所有权匹配时）：使用 `--merge --delete-branch`
+8. **合并**（仅在所有权匹配时）：使用 `--merge --delete-branch`。**合并后必须同时删除本地分支（`git branch -d <branch-name>`），不要留下废弃分支。**
 
 ### 发布
 
@@ -569,6 +569,20 @@ gh pr merge <编号> --merge --delete-branch
 git checkout main && git pull origin main
 ```
 
+> **⚠️ 必须清理已合并的分支：**
+>
+> `--delete-branch` 仅删除**远程**分支。合并后**必须**同时删除本地分支，否则本地会积累大量废弃分支：
+>
+> ```bash
+> # 删除本地已合并的分支
+> git branch -d <branch-name>
+>
+> # 批量清理所有已合并的本地分支（不含 main/master/develop）
+> git branch --merged main | grep -vE '^\*|main$|master$|develop$' | xargs -r git branch -d
+> ```
+>
+> **如果忘记删除本地分支，远程分支已被删除后，本地分支将变为"幽灵分支"——指向已不存在的远程追踪引用。定期运行 `git fetch --prune` 清理失效的远程追踪引用。**
+
 合并策略遵循项目的偏好：
 
 - `--merge` — 标准合并提交
@@ -580,6 +594,21 @@ git checkout main && git pull origin main
 ## 步骤 7：发布（仅在所有权匹配时）
 
 **前置条件：步骤 5 结果为"匹配"且步骤 6 已执行。否则跳过此步骤。**
+
+### 检查之前发布的 Assets（创建新 Release 前必须执行）
+
+> **在创建新 Release 之前，必须先查询之前发布的 assets 列表，确保新 Release 不会遗漏任何预期的产物。**
+
+```bash
+# 查看最近一次发布的所有 assets
+gh release view --json assets --jq ".assets[].name"
+
+# 查看所有发布的 assets 概览（含发布标签）
+gh release list --limit 5
+gh release view <previous-tag> --json assets --jq ".assets[].name"
+```
+
+**对比之前 Release 的 assets 列表，确认新 Release 需要上传的产物。** 如果之前每个 Release 都包含特定文件（如 `.zip`、`.tar.gz`、`.whl`、`.exe` 等），新 Release 也应包含对应的产物。
 
 ### 发布说明格式
 
@@ -634,7 +663,18 @@ gh release upload vX.Y.Z "artifact-file" --clobber
 ### 发布后
 
 - 删除本地构建产物（zip、tar.gz 等）
-- 验证 GitHub 上的发布页面显示所有预期的资产
+
+- **验证 GitHub 上的发布页面显示所有预期的 assets：**
+
+```bash
+# 查看刚创建的 Release 的 assets 列表
+gh release view vX.Y.Z --json assets --jq ".assets[].name"
+```
+
+- **与之前 Release 的 assets 数量进行对比。如果之前的 Release 有 N 个 assets，新 Release 应有相同或更多数量的 assets。数量不一致时必须暂停并确认是否遗漏了产物。**
+
+- 删除已合并的本地分支（参见步骤 6 中的分支清理说明）
+
 - 验证包注册表（如适用）显示新版本
 
 ## 发布检查清单
@@ -647,8 +687,12 @@ gh release upload vX.Y.Z "artifact-file" --clobber
 - [ ] 行尾符合项目规范
 - [ ] 已使用 --body-file 创建 PR
 - [ ] 已执行所有权验证（步骤 5）
+- [ ] 已检查之前 Release 的 assets 列表
 - [ ] 所有权匹配：已合并 PR、已创建 Release、已上传资产
+- [ ] 已验证新 Release 的 assets 与之前 Release 一致（数量和内容）
 - [ ] 所有权不匹配：仅创建 PR，已通知所有者
+- [ ] 已删除已合并的远程分支（--delete-branch）
+- [ ] 已删除已合并的本地分支（git branch -d）
 - [ ] 已清理本地构建产物
 ```
 
@@ -661,6 +705,8 @@ gh release upload vX.Y.Z "artifact-file" --clobber
 | 批处理文件乱码 | 行尾不正确 | `.gitattributes` 强制使用 CRLF |
 | 误在他人的仓库上合并/发布 | 跳过了所有权检查 | 必须执行步骤 5 |
 | 版本号更新错误 | 忽略了项目的版本控制策略 | 从现有标签检测策略 |
+| 新 Release 遗漏 assets | 未检查之前 Release 的 assets 列表 | 发布前用 `gh release view --json assets` 对比 |
+| 本地分支未清理 | 只删除了远程分支，忘记删除本地分支 | 合并后立即执行 `git branch -d <branch>` |
 
 ---
 

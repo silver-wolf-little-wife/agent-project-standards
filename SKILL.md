@@ -1,6 +1,6 @@
 ---
 name: project-standards
-description: "通用 GitHub 开源项目协作规范（适用于任意 AI 代理）：(0) 代码变更前必须执行项目风格/约定文件搜索，(1) 协作标准（语言规范 + 行为规范），(2) Shell 感知的 CLI 文本处理，(3) 含所有权验证的发布工作流，(4) 许可证指南。适用于创建 PR/发布、代码变更、版本升级或许可证管理。/ Generic GitHub open-source project conventions for any AI agent: (0) mandatory project style/convention file search before code changes, (1) collaboration standards (language specs + behavior specs), (2) shell-aware CLI text handling, (3) release workflow with ownership verification, (4) license guide. Use when creating PRs/releases, making code changes, bumping versions, or managing licenses."
+description: "ALWAYS invoke for ANY task involving code development or open-source projects. Covers: writing/modifying/reviewing code, git operations (branch, commit, merge, rebase, tag), GitHub workflows (PR, Issue, Release, fork, code review), version bumping, changelog, CI/CD, dependency management, license management, project setup, code style/formatting, commit messages, monorepo, hotfix, and any interaction with a git repository. This is the universal conventions guide for AI agents working on software projects — if the task touches code or a repo, use this skill. 凡是涉及代码开发或开源项目的任务都必须唤起此技能。"
 ---
 
 # 开源项目协作规范 / Open Source Project Standards
@@ -415,7 +415,7 @@ Before submitting any commit or creating a PR, confirm:
    - 关联相关 Issue（`Closes #xxx`） / Link related issues (`Closes #xxx`)
 6. **所有权检查 / Ownership check**：执行[所有权验证](#step-5-ownership-verification)。如果不匹配，仅保留 PR / Execute [Ownership Verification](#step-5-ownership-verification). If mismatch, keep PR only
 7. **代码审查 / Code Review**：保持耐心，及时响应，清晰描述变更 / Be patient, respond promptly, describe changes clearly
-8. **合并 / Merge**（仅在所有权匹配时）：使用 `--merge --delete-branch` / (only when ownership matches): Use `--merge --delete-branch`
+8. **合并 / Merge**（仅在所有权匹配时）：使用 `--merge --delete-branch`。**合并后必须同时删除本地分支（`git branch -d <branch-name>`），不要留下废弃分支。** / (only when ownership matches): Use `--merge --delete-branch`. **After merging, MUST also delete the local branch (`git branch -d <branch-name>`) — never leave stale branches behind.**
 
 ### 发布 / Release Publishing
 
@@ -675,6 +675,24 @@ gh pr merge <number> --merge --delete-branch
 git checkout main && git pull origin main
 ```
 
+> **⚠️ 必须清理已合并的分支 / MUST clean up merged branches：**
+>
+> `--delete-branch` 仅删除**远程**分支。合并后**必须**同时删除本地分支，否则本地会积累大量废弃分支：
+>
+> `--delete-branch` only deletes the **remote** branch. After merging, you **MUST** also delete the local branch — otherwise stale branches accumulate locally:
+>
+> ```bash
+> # 删除本地已合并的分支 / Delete local merged branch
+> git branch -d <branch-name>
+>
+> # 批量清理所有已合并的本地分支（不含 main/master/develop）/ Bulk prune all merged local branches (excluding main/master/develop)
+> git branch --merged main | grep -vE '^\*|main$|master$|develop$' | xargs -r git branch -d
+> ```
+>
+> **如果忘记删除本地分支，远程分支已被删除后，本地分支将变为"幽灵分支"——指向已不存在的远程追踪引用。定期运行 `git fetch --prune` 清理失效的远程追踪引用。**
+>
+> **If you forget to delete the local branch, after the remote branch is deleted the local branch becomes a "ghost branch" — pointing to a remote-tracking reference that no longer exists. Run `git fetch --prune` regularly to clean up stale remote-tracking references.**
+
 合并策略遵循项目的偏好：
 
 Merge strategy follows the project's preference:
@@ -692,6 +710,25 @@ If the project enforces a specific merge strategy via branch protection rules, f
 **前置条件：步骤 5 结果为"匹配"且步骤 6 已执行。否则跳过此步骤。**
 
 **Prerequisite: Step 5 result is "match" AND Step 6 has been executed. Otherwise, skip this step.**
+
+### 检查之前发布的 Assets（创建新 Release 前必须执行） / Check Previous Release Assets (MANDATORY Before Creating New Release)
+
+> **在创建新 Release 之前，必须先查询之前发布的 assets 列表，确保新 Release 不会遗漏任何预期的产物。**
+>
+> **Before creating a new Release, you MUST first query the list of assets from previous releases to ensure the new Release doesn't miss any expected artifacts.**
+
+```bash
+# 查看最近一次发布的所有 assets / View all assets from the most recent release
+gh release view --json assets --jq ".assets[].name"
+
+# 查看所有发布的 assets 概览（含发布标签）/ View assets overview for all releases (with release tags)
+gh release list --limit 5
+gh release view <previous-tag> --json assets --jq ".assets[].name"
+```
+
+**对比之前 Release 的 assets 列表，确认新 Release 需要上传的产物。** 如果之前每个 Release 都包含特定文件（如 `.zip`、`.tar.gz`、`.whl`、`.exe` 等），新 Release 也应包含对应的产物。
+
+**Compare the assets list from previous releases to confirm which artifacts the new Release should upload.** If every previous release includes specific files (e.g., `.zip`, `.tar.gz`, `.whl`, `.exe`), the new release should include the corresponding artifacts as well.
 
 ### 发布说明格式 / Release Notes Format
 
@@ -757,8 +794,19 @@ gh release upload vX.Y.Z "artifact-file" --clobber
 - 删除本地构建产物（zip、tar.gz 等）
 - Delete local build artifacts (zip, tar.gz, etc.)
 
-- 验证 GitHub 上的发布页面显示所有预期的资产
-- Verify the release page on GitHub shows all expected assets
+- **验证 GitHub 上的发布页面显示所有预期的 assets：**
+- **Verify the release page on GitHub shows ALL expected assets:**
+
+```bash
+# 查看刚创建的 Release 的 assets 列表 / View assets list of the just-created release
+gh release view vX.Y.Z --json assets --jq ".assets[].name"
+```
+
+- **与之前 Release 的 assets 数量进行对比。如果之前的 Release 有 N 个 assets，新 Release 应有相同或更多数量的 assets。数量不一致时必须暂停并确认是否遗漏了产物。**
+- **Compare asset count with previous releases. If the previous release had N assets, the new release should have the same or more. A discrepancy MUST trigger a pause to verify no artifacts were missed.**
+
+- 删除已合并的本地分支（参见步骤 6 中的分支清理说明）
+- Delete the merged local branch (see branch cleanup instructions in Step 6)
 
 - 验证包注册表（如适用）显示新版本
 - Verify package registry (if applicable) shows the new version
@@ -773,8 +821,12 @@ gh release upload vX.Y.Z "artifact-file" --clobber
 - [ ] 行尾符合项目规范 / Line endings match project convention
 - [ ] 已使用 --body-file 创建 PR / PR created with --body-file
 - [ ] 已执行所有权验证（步骤 5）/ Ownership verification executed (Step 5)
+- [ ] 已检查之前 Release 的 assets 列表 / Previous Release assets list checked
 - [ ] 所有权匹配：已合并 PR、已创建 Release、已上传资产 / Ownership match: PR merged, Release created, assets uploaded
+- [ ] 已验证新 Release 的 assets 与之前 Release 一致（数量和内容）/ New Release assets verified against previous releases (count and content)
 - [ ] 所有权不匹配：仅创建 PR，已通知所有者 / Ownership mismatch: PR only, owner notified
+- [ ] 已删除已合并的远程分支（--delete-branch）/ Merged remote branch deleted (--delete-branch)
+- [ ] 已删除已合并的本地分支（git branch -d）/ Merged local branch deleted (git branch -d)
 - [ ] 已清理本地构建产物 / Local build artifacts cleaned up
 ```
 
@@ -786,7 +838,9 @@ gh release upload vX.Y.Z "artifact-file" --clobber
 | PR 正文显示字面量 `\n` / PR body shows literal `\n` | PowerShell 不解析 `\n` / PowerShell doesn't parse `\n` | 使用 Here-String 或文件 / Use Here-String or file |
 | 批处理文件乱码 / Batch files garbled | 行尾不正确 / Wrong line endings | `.gitattributes` 强制使用 CRLF / `.gitattributes` enforce CRLF |
 | 误在他人的仓库上合并/发布 / Accidentally merge/release on someone else's repo | 跳过了所有权检查 / Skipped ownership check | 必须执行步骤 5 / Must execute Step 5 |
-| 版本号更新错误 / Wrong version bump | 忽略了项目的版本控制策略 / Ignored project's versioning strategy | 从现有标签检测策略 / Detect strategy from existing tags |/n/n---
+| 版本号更新错误 / Wrong version bump | 忽略了项目的版本控制策略 / Ignored project's versioning strategy | 从现有标签检测策略 / Detect strategy from existing tags |
+| 新 Release 遗漏 assets / New Release missing assets | 未检查之前 Release 的 assets 列表 / Didn't check previous release's assets list | 发布前用 `gh release view --json assets` 对比 / Compare with `gh release view --json assets` before release |
+| 本地分支未清理 / Local branches not cleaned up | 只删除了远程分支，忘记删除本地分支 / Only deleted remote branch, forgot local | 合并后立即执行 `git branch -d <branch>` / Run `git branch -d <branch>` immediately after merge |/n/n---
 
 # 开源许可证指南 / Open-Source License Guide
 
