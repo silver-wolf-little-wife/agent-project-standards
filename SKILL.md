@@ -1,56 +1,62 @@
 ---
 name: project-standards
-description: "Generic GitHub open-source project conventions for any AI agent: (0) mandatory project style/convention file search before code changes, (1) collaboration standards (language specs + behavior specs), (2) shell-aware CLI text handling, (3) release workflow with ownership verification, (4) license guide. Use when creating PRs/releases, making code changes, bumping versions, or managing licenses."
+description: "通用 GitHub 开源项目协作规范（适用于任意 AI 代理）：(0) 代码变更前必须执行项目风格/约定文件搜索，(1) 协作标准（语言规范 + 行为规范），(2) Shell 感知的 CLI 文本处理，(3) 含所有权验证的发布工作流，(4) 许可证指南。适用于创建 PR/发布、代码变更、版本升级或许可证管理。/ Generic GitHub open-source project conventions for any AI agent: (0) mandatory project style/convention file search before code changes, (1) collaboration standards (language specs + behavior specs), (2) shell-aware CLI text handling, (3) release workflow with ownership verification, (4) license guide. Use when creating PRs/releases, making code changes, bumping versions, or managing licenses."
 ---
 
-# Open Source Project Standards
+# 开源项目协作规范 / Open Source Project Standards
+
+面向 AI 代理和开发者的通用 GitHub 开源项目协作规范。所有规则均与具体项目无关——代理必须首先检测并遵循各项目自身的约定。
 
 A universal conventions guide for AI agents and developers collaborating on GitHub open-source projects. All rules are project-agnostic — the agent must detect and follow each project's own conventions first.
 
-Covers seven core sections:
+涵盖七个核心部分 / Covers seven core sections:
 
-1. [Project Convention File Search (Mandatory First Step)](#project-convention-file-search-mandatory-first-step)
-2. [GitHub Collaboration Standards](#github-collaboration-standards) (Language Specs + Behavior Specs)
-3. [Shell CLI Multi-line Text Handling](#shell-cli-multi-line-text-handling)
-4. [Release Workflow with Ownership Verification](#release-workflow-with-ownership-verification)
-5. [Open-Source License Guide](#open-source-license-guide)
-6. [Common Development Scenarios](#common-development-scenarios) (10 scenarios including publishing new projects)
-7. [Agent Configuration Reference](#agent-configuration-reference)
+1. [项目约定文件搜索（必须的第一步） / Project Convention File Search (Mandatory First Step)](#project-convention-file-search-mandatory-first-step)
+2. [GitHub 协作标准 / GitHub Collaboration Standards](#github-collaboration-standards)（语言规范 + 行为规范 / Language Specs + Behavior Specs）
+3. [Shell CLI 多行文本处理 / Shell CLI Multi-line Text Handling](#shell-cli-multi-line-text-handling)
+4. [含所有权验证的发布工作流 / Release Workflow with Ownership Verification](#release-workflow-with-ownership-verification)
+5. [开源许可证指南 / Open-Source License Guide](#open-source-license-guide)
+6. [常见开发场景 / Common Development Scenarios](#common-development-scenarios)（10 个场景，包括发布新项目 / 10 scenarios including publishing new projects）
+7. [代理配置参考 / Agent Configuration Reference](#agent-configuration-reference)
 
 ---
 
-# Project Convention File Search (Mandatory First Step)
+# 项目约定文件搜索（必须的第一步） / Project Convention File Search (Mandatory First Step)
 
+> **强制要求：在对项目进行任何代码变更之前，代理必须执行本节描述的约定文件搜索。此步骤不可跳过。**
+>
 > **MANDATORY: Before making ANY code change in a project, the agent MUST perform the convention file search described in this section. This step is never skippable.**
 
-## Search Procedure
+## 搜索流程 / Search Procedure
 
-### Step 1: Search for Convention Files
+### 步骤 1：搜索约定文件 / Step 1: Search for Convention Files
+
+在修改任何项目之前，主动搜索以下约定/风格文件：
 
 Before modifying any project, proactively search for these convention/style files:
 
-| Priority | File Name | Purpose |
+| 优先级 / Priority | 文件名 / File Name | 用途 / Purpose |
 |----------|-----------|---------|
-| HIGH | `STYLE_GUIDE.md` / `STYLEGUIDE.md` / `style-guide.md` | Project style guide |
-| HIGH | `.editorconfig` | Editor format config (indent, EOL, encoding) |
-| HIGH | `.eslintrc*` / `biome.json` / `.prettierrc*` | JS/TS formatting |
-| HIGH | `pyproject.toml` / `setup.cfg` / `.flake8` / `tox.ini` | Python formatting |
-| HIGH | `rustfmt.toml` / `rust-toolchain.toml` | Rust formatting |
-| HIGH | `.rubocop.yml` / `Gemfile` (Ruby) | Ruby formatting |
-| HIGH | `golangci.yml` / `.golangci.yaml` | Go linting |
-| HIGH | `checkstyle.xml` / `spotless.gradle` (Java/Kotlin) | Java/Kotlin formatting |
-| HIGH | `.swiftlint.yml` | Swift formatting |
-| HIGH | `.clang-format` / `.clang-tidy` | C/C++ formatting |
-| MEDIUM | `CONTRIBUTING.md` / `CONTRIBUTING` | Contribution guidelines |
-| MEDIUM | `CODE_OF_CONDUCT.md` | Code of conduct |
-| MEDIUM | `.github/CODEOWNERS` | Code review owners |
-| MEDIUM | `.github/ISSUE_TEMPLATE/*` / `.github/PULL_REQUEST_TEMPLATE*` | Issue/PR templates |
-| MEDIUM | `ARCHITECTURE.md` / `DESIGN.md` | Architecture decisions |
-| LOW | `README.md` convention paragraphs | Convention info in README |
+| HIGH | `STYLE_GUIDE.md` / `STYLEGUIDE.md` / `style-guide.md` | 项目风格指南 / Project style guide |
+| HIGH | `.editorconfig` | 编辑器格式配置（缩进、换行、编码） / Editor format config (indent, EOL, encoding) |
+| HIGH | `.eslintrc*` / `biome.json` / `.prettierrc*` | JS/TS 格式化 / JS/TS formatting |
+| HIGH | `pyproject.toml` / `setup.cfg` / `.flake8` / `tox.ini` | Python 格式化 / Python formatting |
+| HIGH | `rustfmt.toml` / `rust-toolchain.toml` | Rust 格式化 / Rust formatting |
+| HIGH | `.rubocop.yml` / `Gemfile` (Ruby) | Ruby 格式化 / Ruby formatting |
+| HIGH | `golangci.yml` / `.golangci.yaml` | Go 代码检查 / Go linting |
+| HIGH | `checkstyle.xml` / `spotless.gradle` (Java/Kotlin) | Java/Kotlin 格式化 / Java/Kotlin formatting |
+| HIGH | `.swiftlint.yml` | Swift 格式化 / Swift formatting |
+| HIGH | `.clang-format` / `.clang-tidy` | C/C++ 格式化 / C/C++ formatting |
+| MEDIUM | `CONTRIBUTING.md` / `CONTRIBUTING` | 贡献指南 / Contribution guidelines |
+| MEDIUM | `CODE_OF_CONDUCT.md` | 行为准则 / Code of conduct |
+| MEDIUM | `.github/CODEOWNERS` | 代码审查负责人 / Code review owners |
+| MEDIUM | `.github/ISSUE_TEMPLATE/*` / `.github/PULL_REQUEST_TEMPLATE*` | Issue/PR 模板 / Issue/PR templates |
+| MEDIUM | `ARCHITECTURE.md` / `DESIGN.md` | 架构决策 / Architecture decisions |
+| LOW | `README.md` 中的约定段落 / convention paragraphs | README 中的约定信息 / Convention info in README |
 
-### Step 2: Search Commands
+### 步骤 2：搜索命令 / Step 2: Search Commands
 
-**Bash / Zsh:**
+**Bash / Zsh：**
 
 ```bash
 find . -maxdepth 3 \( \
@@ -66,7 +72,7 @@ find . -maxdepth 3 \( \
 ls -la .github/ 2>/dev/null
 ```
 
-**PowerShell:**
+**PowerShell：**
 
 ```powershell
 Get-ChildItem -Path . -Recurse -Depth 3 -Include `
@@ -77,50 +83,65 @@ Get-ChildItem -Path . -Recurse -Depth 3 -Include `
   -ErrorAction SilentlyContinue
 ```
 
-### Step 3: Read and Comply
+### 步骤 3：阅读并遵守 / Step 3: Read and Comply
 
-- If files found → **MUST read their contents and strictly follow the format requirements**
-- Multiple conflicting convention files → Higher priority wins (custom project guide > tool config > generic template)
-- No convention files found → Follow this document's defaults
+- 如果找到文件 → **必须阅读其内容并严格遵循格式要求** / If files found → **MUST read their contents and strictly follow the format requirements**
+- 多个约定文件存在冲突 → 优先级更高的胜出（自定义项目指南 > 工具配置 > 通用模板） / Multiple conflicting convention files → Higher priority wins (custom project guide > tool config > generic template)
+- 未找到约定文件 → 遵循本文档的默认值 / No convention files found → Follow this document's defaults
 
-### Priority Rule
+### 优先级规则 / Priority Rule
 
 ```
+# 项目自身的约定文件 > 本文档的默认值 > 通用行业惯例
+# Project's own convention files > This document's defaults > General industry conventions
 Project's own convention files > This document's defaults > General industry conventions
 ```
 
-### Monorepo Awareness
+### Monorepo 感知 / Monorepo Awareness
+
+在 Monorepo 项目（包含多个包的工作区）中，需在以下位置搜索：
 
 In monorepo projects (workspaces with multiple packages), search at:
-- Repository root
-- Each package/workspace directory
-- The specific package being modified
+
+- 仓库根目录 / Repository root
+- 每个包/工作区目录 / Each package/workspace directory
+- 正在修改的具体包 / The specific package being modified
+
+最具体（最接近被修改代码）的约定优先。
 
 The most specific (closest to the code being changed) convention takes precedence.
 
 ---
 
-# GitHub Collaboration Standards
+# GitHub 协作标准 / GitHub Collaboration Standards
+
+本节定义了在 GitHub 开源项目中协作的语言和行为规范。这些规范涵盖整个协作生命周期：代码编写、PR 提交、Issue 讨论和版本发布。
 
 This section defines the language and behavior standards for collaborating on GitHub open-source projects. These standards span the entire collaboration lifecycle: code writing, PR submission, issue discussion, and release publishing.
 
 ---
 
-## Part I: Language Specs
+## 第一部分：语言规范 / Part I: Language Specs
 
-### 1.1 Collaboration Language Detection
+### 1.1 协作语言检测 / Collaboration Language Detection
+
+**代理在生成任何文本输出之前，必须自动检测项目的协作语言。** 检测优先级：
 
 **The agent MUST auto-detect the project's collaboration language before generating any text output.** Detection priority:
 
-1. **CONTRIBUTING.md / STYLE_GUIDE.md** explicitly specifies a language → Use that language
-2. **README.md** primary language → Use that language for collaboration text
-3. **Existing PR/Issue/commit history** dominant language → Use that language
-4. **User instruction** → If the user explicitly requests a specific language, use it
-5. **Fallback** → English
+1. **CONTRIBUTING.md / STYLE_GUIDE.md** 明确指定了语言 → 使用该语言 / explicitly specifies a language → Use that language
+2. **README.md** 的主要语言 → 使用该语言编写协作文本 / primary language → Use that language for collaboration text
+3. **现有 PR/Issue/提交历史** 的主要语言 → 使用该语言 / dominant language → Use that language
+4. **用户指令** → 如果用户明确要求使用特定语言，则使用该语言 / If the user explicitly requests a specific language, use it
+5. **兜底方案** → 英语 / **Fallback** → English
+
+检测到的语言适用于：PR 标题和描述、提交消息、Issue 标题和描述、发布说明、代码审查评论以及所有协作者沟通。
 
 The detected language applies to: PR titles and descriptions, commit messages, issue titles and descriptions, release notes, code review comments, and all collaborator communication.
 
-### 1.2 Commit Message Format
+### 1.2 提交消息格式 / Commit Message Format
+
+遵循 [Conventional Commits（约定式提交）](https://www.conventionalcommits.org/)：
 
 Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
@@ -130,23 +151,25 @@ type(scope): short description
 [optional body]
 ```
 
-**Types:**
+**类型 / Types:**
 
-| Type | Meaning |
+| 类型 / Type | 含义 / Meaning |
 |------|---------|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `docs` | Documentation changes |
-| `chore` | Build / tooling / deps |
-| `refactor` | Restructure (no behavior change) |
-| `test` | Test-related changes |
-| `style` | Formatting (no logic change) |
-| `perf` | Performance optimization |
-| `ci` | CI/CD configuration changes |
-| `build` | Build system or external dependencies |
-| `revert` | Revert a previous commit |
+| `feat` | 新功能 / New feature |
+| `fix` | 缺陷修复 / Bug fix |
+| `docs` | 文档变更 / Documentation changes |
+| `chore` | 构建 / 工具链 / 依赖 / Build / tooling / deps |
+| `refactor` | 重构（无行为变更） / Restructure (no behavior change) |
+| `test` | 测试相关变更 / Test-related changes |
+| `style` | 格式化（无逻辑变更） / Formatting (no logic change) |
+| `perf` | 性能优化 / Performance optimization |
+| `ci` | CI/CD 配置变更 / CI/CD configuration changes |
+| `build` | 构建系统或外部依赖 / Build system or external dependencies |
+| `revert` | 回退之前的提交 / Revert a previous commit |
 
-**Scope (optional):** Identifies the affected area, e.g., `feat(auth):`, `fix(ui):`, `build(deps):`. In monorepos, use the package name as scope.
+**作用域（可选）：** 标识受影响的区域，例如 / **Scope (optional):** Identifies the affected area, e.g., `feat(auth):`, `fix(ui):`, `build(deps):`. 在 Monorepo 中，使用包名作为作用域。 / In monorepos, use the package name as scope.
+
+**破坏性变更：** 在类型/作用域后附加 `!`，或添加 `BREAKING CHANGE:` 尾部说明：
 
 **Breaking changes:** Append `!` after type/scope, or add `BREAKING CHANGE:` footer:
 
@@ -157,39 +180,45 @@ BREAKING CHANGE: The /v1/users endpoint has been removed.
 Use /v2/users instead.
 ```
 
-### 1.3 Branch Naming
+### 1.3 分支命名 / Branch Naming
 
 ```
 type/short-description
 ```
 
-Examples: `feat/add-dark-mode`, `fix/memory-leak`, `docs/update-api-docs`, `refactor/config-module`
+示例 / Examples: `feat/add-dark-mode`, `fix/memory-leak`, `docs/update-api-docs`, `refactor/config-module`
+
+描述部分使用 `kebab-case`（短横线分隔）。如果项目有自己的约定（例如使用 `feature/` 而非 `feat/`），则遵循项目的约定。
 
 Use `kebab-case` for the description. If the project has its own convention (e.g., `feature/` instead of `feat/`), follow the project's convention.
 
-### 1.4 Source Code Comment Language
+### 1.4 源代码注释语言 / Source Code Comment Language
 
-| Scenario | Language |
+| 场景 / Scenario | 语言 / Language |
 |----------|----------|
-| Public API documentation (docstring / JSDoc) | Follow project convention; default to project's primary language |
-| Internal implementation comments | Match existing comments in the same file |
-| New files | Follow project convention; default to project's primary language |
-| Third-party library wrappers/extensions | Match the original library's language |
+| 公共 API 文档（docstring / JSDoc） / Public API documentation | 遵循项目约定；默认使用项目的主要语言 / Follow project convention; default to project's primary language |
+| 内部实现注释 / Internal implementation comments | 与同一文件中已有注释保持一致 / Match existing comments in the same file |
+| 新文件 / New files | 遵循项目约定；默认使用项目的主要语言 / Follow project convention; default to project's primary language |
+| 第三方库封装/扩展 / Third-party library wrappers/extensions | 与原始库的语言保持一致 / Match the original library's language |
+
+**核心原则：** 新注释必须与同一文件中已有注释的语言保持一致。除非项目明确允许，否则不要在单个文件中混合使用注释语言。
 
 **Key principle:** New comments MUST match the language of existing comments in the same file. Never mix comment languages within a single file unless the project explicitly allows it.
 
-### 1.5 Variable and Function Naming
+### 1.5 变量和函数命名 / Variable and Function Naming
 
-- Follow the project's existing naming style (`camelCase`, `snake_case`, `PascalCase`, `SCREAMING_SNAKE_CASE`, etc.)
-- **Never** mix naming styles within the same file
-- New code must match adjacent code's naming
-- If linter/formatter config exists, follow its rules
+- 遵循项目已有的命名风格（`camelCase`、`snake_case`、`PascalCase`、`SCREAMING_SNAKE_CASE` 等） / Follow the project's existing naming style
+- **绝不**在同一文件中混合使用命名风格 / **Never** mix naming styles within the same file
+- 新代码必须与相邻代码的命名保持一致 / New code must match adjacent code's naming
+- 如果存在 linter/formatter 配置，则遵循其规则 / If linter/formatter config exists, follow its rules
 
-### 1.6 PR / Issue Writing
+### 1.6 PR / Issue 编写 / PR / Issue Writing
 
-**PR title:** Follow Conventional Commits format, use the collaboration language
+**PR 标题：** 遵循 Conventional Commits 格式，使用协作语言。
 
-**PR description template:**
+**PR title:** Follow Conventional Commits format, use the collaboration language.
+
+**PR 描述模板 / PR description template:**
 
 ```markdown
 ## Summary
@@ -214,9 +243,13 @@ What was changed and why.
 Closes #<issue-number>
 ```
 
+如果项目有 PR 模板（`.github/PULL_REQUEST_TEMPLATE*`），则使用该模板。
+
 If the project has a PR template (`.github/PULL_REQUEST_TEMPLATE*`), use that template instead.
 
-**Issue titles:** Concise, use the collaboration language
+**Issue 标题：** 简洁明了，使用协作语言。
+
+**Issue titles:** Concise, use the collaboration language.
 
 ```
 [Bug] Login page occasionally shows blank screen
@@ -224,160 +257,191 @@ If the project has a PR template (`.github/PULL_REQUEST_TEMPLATE*`), use that te
 [Question] How to configure multi-instance deployment
 ```
 
-### 1.7 Release Notes Language
+### 1.7 发布说明语言 / Release Notes Language
 
-- If the project's `CHANGES.md` / `CHANGELOG.md` uses bilingual format → Release Notes should be bilingual
-- If the project uses a single language → Stay consistent
-- No convention found → Use the detected collaboration language
+- 如果项目的 `CHANGES.md` / `CHANGELOG.md` 使用双语格式 → 发布说明应使用双语 / If the project uses bilingual format → Release Notes should be bilingual
+- 如果项目使用单一语言 → 保持一致 / If the project uses a single language → Stay consistent
+- 未找到约定 → 使用检测到的协作语言 / No convention found → Use the detected collaboration language
 
-### 1.8 Dependency Updates
+### 1.8 依赖更新 / Dependency Updates
+
+更新依赖时：
 
 When updating dependencies:
 
-- Follow the project's lock file strategy (`package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, `Pipfile.lock`, `Cargo.lock`, `go.sum`, etc.)
-- Never commit changes to lock files that are inconsistent with manifest changes
-- Use the project's existing package manager — don't introduce a new one
-- Group related dependency updates into a single commit/PR (e.g., `chore(deps): update react to v19`)
-- Isolate breaking dependency updates into separate PRs
+- 遵循项目的锁文件策略（`package-lock.json`、`yarn.lock`、`pnpm-lock.yaml`、`Pipfile.lock`、`Cargo.lock`、`go.sum` 等） / Follow the project's lock file strategy
+- 绝不提交与清单文件变更不一致的锁文件变更 / Never commit changes to lock files that are inconsistent with manifest changes
+- 使用项目现有的包管理器——不要引入新的包管理器 / Use the project's existing package manager — don't introduce a new one
+- 将相关的依赖更新合并到单个提交/PR 中（例如 `chore(deps): update react to v19`） / Group related dependency updates into a single commit/PR
+- 将包含破坏性变更的依赖更新隔离到单独的 PR 中 / Isolate breaking dependency updates into separate PRs
 
 ---
 
-## Part II: Behavior Specs
+## 第二部分：行为规范 / Part II: Behavior Specs
 
-### 2.1 Respect Existing Code Style
+### 2.1 尊重已有代码风格 / Respect Existing Code Style
+
+**这是最重要的行为规则。** 在修改任何代码之前：
 
 **This is the most important behavioral rule.** Before modifying any code:
 
-1. **MUST search** (see [Convention File Search](#project-convention-file-search-mandatory-first-step)) for style guides, `.editorconfig`, linter configs
-2. **MUST read** existing source files in the same directory to understand the project's code style, including: indent style (tab/space, width), quote style (single/double), trailing comma policy, import ordering, error handling patterns
-3. **MUST follow** the project's existing style, even if it differs from your preference
-4. **Never** introduce format changes inconsistent with the project style in the same PR
+1. **必须搜索**（参见[约定文件搜索](#project-convention-file-search-mandatory-first-step)）风格指南、`.editorconfig`、linter 配置 / **MUST search** (see [Convention File Search](#project-convention-file-search-mandatory-first-step)) for style guides, `.editorconfig`, linter configs
+2. **必须阅读**同一目录中的已有源文件，了解项目的代码风格，包括：缩进风格（制表符/空格、宽度）、引号风格（单引号/双引号）、尾逗号策略、导入排序、错误处理模式 / **MUST read** existing source files in the same directory to understand the project's code style, including: indent style (tab/space, width), quote style (single/double), trailing comma policy, import ordering, error handling patterns
+3. **必须遵循**项目的已有风格，即使它与你的偏好不同 / **MUST follow** the project's existing style, even if it differs from your preference
+4. **绝不**在同一 PR 中引入与项目风格不一致的格式变更 / **Never** introduce format changes inconsistent with the project style in the same PR
 
-### 2.2 Minimal Change Principle
+### 2.2 最小变更原则 / Minimal Change Principle
 
-- PRs should contain ONLY changes directly related to the PR's purpose
-- **Never** bundle unrelated formatting, refactoring, or comment changes in a feature PR
-- Large-scale formatting changes should be a separate `style:` PR
-- Don't modify code you don't understand
-- Don't delete code that looks "redundant" unless you're certain
+- PR 应仅包含与 PR 目的直接相关的变更 / PRs should contain ONLY changes directly related to the PR's purpose
+- **绝不**在功能 PR 中捆绑无关的格式化、重构或注释变更 / **Never** bundle unrelated formatting, refactoring, or comment changes in a feature PR
+- 大规模的格式化变更应作为单独的 `style:` PR / Large-scale formatting changes should be a separate `style:` PR
+- 不要修改你不理解的代码 / Don't modify code you don't understand
+- 不要删除看起来"多余"的代码，除非你确定其确实多余 / Don't delete code that looks "redundant" unless you're certain
 
-### 2.3 No Unrelated Changes
+### 2.3 禁止无关变更 / No Unrelated Changes
+
+以下内容不应出现在功能/修复 PR 中（除非它们就是该 PR 的目的）：
 
 The following should NOT appear in feature/fix PRs (unless they are the PR's purpose):
 
-- Unrelated import additions/removals
-- Unrelated file renames
-- Formatting changes in unrelated code regions
-- Personal preference style changes
-- IDE-generated config changes
+- 无关的导入添加/删除 / Unrelated import additions/removals
+- 无关的文件重命名 / Unrelated file renames
+- 无关代码区域的格式化变更 / Formatting changes in unrelated code regions
+- 个人偏好风格变更 / Personal preference style changes
+- IDE 生成的配置变更 / IDE-generated config changes
 
-### 2.4 Testing and Quality
+### 2.4 测试与质量 / Testing and Quality
 
-- Ensure modified code passes the project's existing tests
-- New features should include corresponding test cases
-- Bug fixes should preferably add regression tests
-- Run the project's existing lint/format checks before committing
-- Don't reduce existing test coverage
+- 确保修改后的代码通过项目的现有测试 / Ensure modified code passes the project's existing tests
+- 新功能应包含相应的测试用例 / New features should include corresponding test cases
+- 缺陷修复最好添加回归测试 / Bug fixes should preferably add regression tests
+- 提交前运行项目现有的 lint/format 检查 / Run the project's existing lint/format checks before committing
+- 不要降低现有的测试覆盖率 / Don't reduce existing test coverage
 
-### 2.5 Communication Standards
+### 2.5 沟通规范 / Communication Standards
 
-- Critique code, not people: In code reviews, discuss code quality only
-- Constructive feedback: Raise issues with suggested solutions
-- Use the collaboration language for all communication
-- Respect project maintainers' final decisions
-- Search for similar existing issues before opening new ones
-- Don't @ mention people unless their attention is genuinely needed
+- 对事不对人：在代码审查中，仅讨论代码质量 / Critique code, not people: In code reviews, discuss code quality only
+- 建设性反馈：提出问题时附带建议的解决方案 / Constructive feedback: Raise issues with suggested solutions
+- 所有沟通使用协作语言 / Use the collaboration language for all communication
+- 尊重项目维护者的最终决定 / Respect project maintainers' final decisions
+- 开设新 Issue 前搜索类似的已有 Issue / Search for similar existing issues before opening new ones
+- 不要 @ 提及他人，除非确实需要他们的关注 / Don't @ mention people unless their attention is genuinely needed
 
-### 2.6 Security and Privacy
+### 2.6 安全与隐私 / Security and Privacy
 
-- **Never** commit secrets, passwords, tokens, or API keys in code, commit messages, or PR descriptions
-- Don't disclose user privacy data in issues
-- Use `.gitignore` to exclude sensitive files
-- Report security vulnerabilities through private channels (Security Advisory), not public issues
+- **绝不**在代码、提交消息或 PR 描述中提交密钥、密码、令牌或 API 密钥 / **Never** commit secrets, passwords, tokens, or API keys in code, commit messages, or PR descriptions
+- 不要在 Issue 中泄露用户隐私数据 / Don't disclose user privacy data in issues
+- 使用 `.gitignore` 排除敏感文件 / Use `.gitignore` to exclude sensitive files
+- 通过私有渠道（Security Advisory）报告安全漏洞，而非公开 Issue / Report security vulnerabilities through private channels (Security Advisory), not public issues
 
-### 2.7 License Compliance
+### 2.7 许可证合规 / License Compliance
 
-- New source files must include a license header (see [License Guide](#open-source-license-guide))
-- Verify third-party code license compatibility before including it
-- Preserve existing copyright notices — never delete others' copyright info
-- When modifying others' code, note changes in the file header as appropriate
+- 新源文件必须包含许可证头部（参见[许可证指南](#open-source-license-guide)） / New source files must include a license header (see [License Guide](#open-source-license-guide))
+- 在引入第三方代码前验证其许可证兼容性 / Verify third-party code license compatibility before including it
+- 保留已有的版权声明——绝不删除他人的版权信息 / Preserve existing copyright notices — never delete others' copyright info
+- 修改他人代码时，在文件头部适当注明变更 / When modifying others' code, note changes in the file header as appropriate
 
-### 2.8 No Tool Signatures in Project Output
+### 2.8 禁止在项目输出中留下工具签名 / No Tool Signatures in Project Output
+
+**严格禁止**在任何项目输出中嵌入 AI 工具签名、生成标记或品牌水印，包括但不限于 `Generated with ...`、`Co-authored-by: ...bot` 等：
 
 **Strictly prohibited** to embed AI tool signatures, generation markers, or brand watermarks in any project output, including but not limited to `Generated with ...`, `Co-authored-by: ...bot`, etc.:
 
-- Commit messages (both title and body)
-- PR titles and descriptions
-- Issue titles and descriptions
-- Release notes / Changelogs
-- Source code file contents
-- Documentation files
-- Configuration files
+- 提交消息（标题和正文） / Commit messages (both title and body)
+- PR 标题和描述 / PR titles and descriptions
+- Issue 标题和描述 / Issue titles and descriptions
+- 发布说明 / 变更日志 / Release notes / Changelogs
+- 源文件内容 / Source code file contents
+- 文档文件 / Documentation files
+- 配置文件 / Configuration files
+
+**理由：** 开源项目的提交历史和文档是项目自身的资产。工具签名会污染 git 历史、降低专业性，并可能引起项目维护者和社区的不满。
 
 **Rationale:** An open-source project's commit history and documentation are the project's own assets. Tool signatures pollute the git history, reduce professionalism, and may cause dissatisfaction among project maintainers and the community.
 
-### 2.9 Pre-commit Checklist
+### 2.9 提交前检查清单 / Pre-commit Checklist
+
+在提交任何提交或创建 PR 之前，确认以下事项：
 
 Before submitting any commit or creating a PR, confirm:
 
 ```
+# 提交前检查清单 / Pre-commit Checklist
 - [ ] Searched and read project convention files (STYLE_GUIDE.md, etc.)
+      已搜索并阅读项目约定文件
 - [ ] Read existing code in the same directory to understand project style
+      已阅读同目录下的已有代码以了解项目风格
 - [ ] Code style matches project's existing style
+      代码风格与项目已有风格一致
 - [ ] No unrelated changes
+      无无关变更
 - [ ] Tests pass
+      测试通过
 - [ ] Lint/format checks pass
+      Lint/格式检查通过
 - [ ] New files have license headers
+      新文件有许可证头部
 - [ ] No sensitive information leaked
+      无敏感信息泄露
 - [ ] Commit message follows Conventional Commits format
+      提交消息遵循 Conventional Commits 格式
 - [ ] No tool signatures/brand watermarks in any output
+      无任何输出中包含工具签名/品牌水印
 - [ ] Dependency changes follow project's package manager strategy
+      依赖变更遵循项目的包管理器策略
 ```
 
 ---
 
-## Part III: PR and Release Workflow
+## 第三部分：PR 与发布工作流 / Part III: PR and Release Workflow
 
-### Standard PR Flow
+### 标准 PR 流程 / Standard PR Flow
 
 ```
+# 标准 PR 流程 / Standard PR Flow
 1. Fork / Create branch → 2. Search conventions → 3. Code & test → 4. Commit → 5. Create PR → 6. Ownership check → 7. Review → 8. Merge (conditional)
 ```
 
-**Detailed steps:**
+**详细步骤 / Detailed steps:**
 
-1. **Create branch**: From `main` (or project's default branch), naming follows [Branch Naming](#13-branch-naming)
-2. **Search conventions**: Execute [Convention File Search](#project-convention-file-search-mandatory-first-step)
-3. **Code and test**: Follow project style, ensure existing tests and lint pass
-4. **Commit**: Follow [Conventional Commits](#12-commit-message-format) format
-5. **Create PR**:
-   - Title follows [PR Writing Standards](#16-pr--issue-writing)
-   - Use PR template if project has `.github/PULL_REQUEST_TEMPLATE*`
-   - Use `--body-file` or `--notes-file` for multi-line content (see [CLI Text Handling](#shell-cli-multi-line-text-handling))
-   - Link related issues (`Closes #xxx`)
-6. **Ownership check**: Execute [Ownership Verification](#step-5-ownership-verification). If mismatch, keep PR only
-7. **Code Review**: Be patient, respond promptly, describe changes clearly
-8. **Merge** (only when ownership matches): Use `--merge --delete-branch`
+1. **创建分支 / Create branch**：从 `main`（或项目的默认分支）创建，命名遵循[分支命名](#13-branch-naming) / From `main` (or project's default branch), naming follows [Branch Naming](#13-branch-naming)
+2. **搜索约定 / Search conventions**：执行[约定文件搜索](#project-convention-file-search-mandatory-first-step) / Execute [Convention File Search](#project-convention-file-search-mandatory-first-step)
+3. **编码和测试 / Code and test**：遵循项目风格，确保现有测试和 lint 通过 / Follow project style, ensure existing tests and lint pass
+4. **提交 / Commit**：遵循 [Conventional Commits](#12-commit-message-format) 格式 / Follow [Conventional Commits](#12-commit-message-format) format
+5. **创建 PR / Create PR**:
+   - 标题遵循 [PR 编写标准](#16-pr--issue-writing) / Title follows [PR Writing Standards](#16-pr--issue-writing)
+   - 如果项目有 `.github/PULL_REQUEST_TEMPLATE*`，则使用 PR 模板 / Use PR template if project has `.github/PULL_REQUEST_TEMPLATE*`
+   - 多行内容使用 `--body-file` 或 `--notes-file`（参见 [CLI 文本处理](#shell-cli-multi-line-text-handling)） / Use `--body-file` or `--notes-file` for multi-line content (see [CLI Text Handling](#shell-cli-multi-line-text-handling))
+   - 关联相关 Issue（`Closes #xxx`） / Link related issues (`Closes #xxx`)
+6. **所有权检查 / Ownership check**：执行[所有权验证](#step-5-ownership-verification)。如果不匹配，仅保留 PR / Execute [Ownership Verification](#step-5-ownership-verification). If mismatch, keep PR only
+7. **代码审查 / Code Review**：保持耐心，及时响应，清晰描述变更 / Be patient, respond promptly, describe changes clearly
+8. **合并 / Merge**（仅在所有权匹配时）：使用 `--merge --delete-branch` / (only when ownership matches): Use `--merge --delete-branch`
 
-### Release Publishing
+### 发布 / Release Publishing
+
+遵循[发布工作流](#release-workflow-with-ownership-verification)部分。
 
 Follow the [Release Workflow](#release-workflow-with-ownership-verification) section.
 
----
+---/n/n---
 
-# Shell CLI Multi-line Text Handling
+# Shell CLI 多行文本处理 / Shell CLI Multi-line Text Handling
+
+不同的 Shell 对换行符的处理方式不同。使用错误的语法会导致 PR/Release 描述中出现字面量 `\n` 文本。
 
 Different shells handle newline characters differently. Using the wrong syntax causes literal `\n` text in PR/Release descriptions.
 
-## Shell Comparison
+## Shell 对比 / Shell Comparison
 
-| Shell | Newline Escape | Note |
+| Shell / Shell | 换行符转义 / Newline Escape | 备注 / Note |
 |-------|---------------|------|
-| **Bash / Zsh** | `\n` | Standard escape sequence |
-| **PowerShell** | `` `n `` | Backtick+n, `\n` is treated as **literal text** |
-| **Fish** | `\n` | Standard escape sequence |
+| **Bash / Zsh** | `\n` | 标准转义序列 / Standard escape sequence |
+| **PowerShell** | `` `n `` | 反引号+n，`\n` 会被当作**字面文本** / Backtick+n, `\n` is treated as **literal text** |
+| **Fish** | `\n` | 标准转义序列 / Standard escape sequence |
 
-## Recommended Approach: File-based (All Shells)
+## 推荐方式：基于文件（所有 Shell）/ Recommended Approach: File-based (All Shells)
+
+这是跨所有环境最可靠的方法：
 
 The most reliable method across all environments:
 
@@ -405,7 +469,7 @@ gh pr create --title "feat: new feature" --body-file body.md
 gh release create vX.Y.Z --title "vX.Y.Z" --notes-file release-notes.md
 ```
 
-## Bash / Zsh Inline
+## Bash / Zsh 内联方式 / Bash / Zsh Inline
 
 ```bash
 gh pr create --title "feat: new feature" --body "$(cat <<'EOF'
@@ -416,63 +480,84 @@ EOF
 )"
 ```
 
-## PowerShell Inline
+## PowerShell 内联方式 / PowerShell Inline
 
 ```powershell
-# Here-String
+# 使用 Here-String / Here-String approach
 gh pr create --title "feat: new feature" --body @"
 ## Changes
 
 Description...
 "@
 
-# Or backtick newlines
+# 或者使用反引号换行 / Or backtick newlines
 gh pr create --title "feat: new feature" --body "## Changes`n`nDescription"
 ```
 
-## Key Rules
+## 关键规则 / Key Rules
 
+1. **优先使用 `--body-file` / `--notes-file`** 处理所有包含多行内容的 `gh` 命令
 1. **Prefer `--body-file` / `--notes-file`** for all `gh` commands with multi-line content
+
+2. **PowerShell：绝不在双引号字符串中使用 `\n`** — 它不会被解释为换行符
 2. **PowerShell: never use `\n`** in double-quoted strings — it won't be interpreted as a newline
+
+3. **PowerShell：包含反引号的内容** 必须使用 `--body-file`，否则 Shell 会吞掉反引号包裹的内容
 3. **PowerShell: content containing backticks** must use `--body-file`, otherwise the shell will swallow backtick-wrapped content
+
+4. 以上规则适用于所有 `gh` 命令：`pr create/edit`、`release create/edit`、`issue create/edit`
 4. Applies to all `gh` commands: `pr create/edit`, `release create/edit`, `issue create/edit`
 
 ---
 
-# Release Workflow with Ownership Verification
+# 带所有权验证的发布工作流 / Release Workflow with Ownership Verification
+
+**核心原则：遵循项目的版本控制策略。在合并/发布前验证所有权。**
 
 **Core principle: Follow the project's versioning strategy. Verify ownership before merge/release.**
 
+> **重要提示：合并和发布操作受所有权验证限制。只有当前 git 用户与仓库所有者匹配时，才允许合并和发布 Release；否则仅创建 PR。**
+>
 > **IMPORTANT: Merge and release operations are restricted by ownership verification. Only when the current git user matches the repository owner is merging and Release publishing allowed; otherwise, only create a PR.**
 
-## Workflow Overview
+## 工作流概述 / Workflow Overview
 
 ```
-1. Code changes → 2. Version bump → 3. Branch & commit → 4. Create PR → 5. Ownership check → 6. Merge (conditional) → 7. Release (conditional)
+1. 代码变更 / Code changes → 2. 版本号更新 / Version bump → 3. 分支与提交 / Branch & commit → 4. 创建 PR / Create PR → 5. 所有权检查 / Ownership check → 6. 合并（有条件）/ Merge (conditional) → 7. 发布（有条件）/ Release (conditional)
 ```
 
-## Step 1: Code Changes
+## 步骤 1：代码变更 / Step 1: Code Changes
+
+实现修复或功能。遵循项目的行尾和编码规范（检查 `.editorconfig` 和 `.gitattributes`）。
 
 Implement fixes or features. Follow the project's line ending and encoding conventions (check `.editorconfig` and `.gitattributes`).
 
+**前置条件：** 必须在编码前执行[规范文件搜索](#project-convention-file-search-mandatory-first-step)。
+
 **Prerequisite:** Must execute [Convention File Search](#project-convention-file-search-mandatory-first-step) before coding.
 
-## Step 2: Version Bump
+## 步骤 2：版本号更新 / Step 2: Version Bump
+
+**检测项目的版本控制策略：**
 
 **Detect the project's versioning strategy:**
 
-| Strategy | Detection | Example |
+| 策略 / Strategy | 检测方式 / Detection | 示例 / Example |
 |----------|-----------|---------|
-| **SemVer** | Existing tags like `v1.2.3` or `CHANGELOG.md` with SemVer | `v1.2.3` → `v1.3.0` (minor) or `v1.2.4` (patch) |
-| **CalVer** | Tags like `2024.06.1` or date-based versions | Follow the project's date format |
-| **Custom** | Project-specific version files or patterns | Follow existing convention |
+| **SemVer** | 已有标签如 `v1.2.3` 或 `CHANGELOG.md` 使用 SemVer / Existing tags like `v1.2.3` or `CHANGELOG.md` with SemVer | `v1.2.3` → `v1.3.0`（minor 次版本）或 / or `v1.2.4`（patch 补丁版本） |
+| **CalVer** | 标签如 `2024.06.1` 或基于日期的版本 / Tags like `2024.06.1` or date-based versions | 遵循项目的日期格式 / Follow the project's date format |
+| **自定义 / Custom** | 项目特定的版本文件或模式 / Project-specific version files or patterns | 遵循现有约定 / Follow existing convention |
+
+**需要更新的文件**（如果存在）：
 
 **Files to update** (if they exist):
 
-- `package.json` / `pyproject.toml` / `Cargo.toml` / `go.mod` / `*.csproj` / etc.
+- `package.json` / `pyproject.toml` / `Cargo.toml` / `go.mod` / `*.csproj` / 等 / etc.
 - `CHANGELOG.md` / `CHANGES.md` / `HISTORY.md`
-- `README.md` version references
-- Any project-specific version files
+- `README.md` 中的版本引用 / version references
+- 项目特定的版本文件 / Any project-specific version files
+
+**变更日志条目格式**（遵循项目现有格式；如不存在则使用以下格式）：
 
 **Changelog entry format** (follow the project's existing format; if none exists):
 
@@ -489,70 +574,99 @@ Implement fixes or features. Follow the project's line ending and encoding conve
 - Description of other changes
 ```
 
-## Step 3: Branch, Commit, Push
+## 步骤 3：分支、提交、推送 / Step 3: Branch, Commit, Push
+
+**分支命名：** 遵循[分支命名](#13-branch-naming)。
 
 **Branch naming:** Follow [Branch Naming](#13-branch-naming).
 
+**提交信息：** 遵循[约定式提交](#12-commit-message-format)。
+
 **Commit message:** Follow [Conventional Commits](#12-commit-message-format).
 
-## Step 4: Create PR
+## 步骤 4：创建 PR / Step 4: Create PR
+
+多行内容请使用 `--body-file`。参见 [CLI 文本处理](#shell-cli-multi-line-text-handling)。
 
 Use `--body-file` for multi-line content. See [CLI Text Handling](#shell-cli-multi-line-text-handling).
 
+PR 标题和描述遵循 [PR/Issue 编写标准](#16-pr--issue-writing)。
+
 PR title and description follow [PR/Issue Writing Standards](#16-pr--issue-writing).
 
-## Step 5: Ownership Verification
+## 步骤 5：所有权验证 / Step 5: Ownership Verification
 
+> **此步骤为强制执行，不可跳过。必须在合并前执行。**
+>
 > **This step is MANDATORY and cannot be skipped. Must execute before merging.**
+
+创建 PR 后、合并前，验证当前 git 用户身份是否与远程仓库所有者匹配。
 
 After creating the PR and before merging, verify that the current git user identity matches the remote repository owner.
 
-### Verification Method
+### 验证方法 / Verification Method
 
 ```bash
-# 1. Get local git user name
+# 1. 获取本地 git 用户名 / Get local git user name
 git config user.name
 
-# 2. Get remote repository owner (GitHub username/org)
+# 2. 获取远程仓库所有者（GitHub 用户名/组织）/ Get remote repository owner (GitHub username/org)
 gh repo view --json owner --jq ".owner.login"
 
-# 3. Get currently logged-in GitHub user
+# 3. 获取当前登录的 GitHub 用户 / Get currently logged-in GitHub user
 gh api user --jq ".login"
 ```
 
-### Decision Rules
+### 判定规则 / Decision Rules
+
+比较以下三个值：
 
 Compare these three values:
 
-| Info | Command | Example |
+| 信息 / Info | 命令 / Command | 示例 / Example |
 |------|---------|---------|
-| Local git user | `git config user.name` | `ZhangSan` |
-| GitHub logged-in user | `gh api user --jq ".login"` | `zhangsan` |
-| Repository owner | `gh repo view --json owner --jq ".owner.login"` | `zhangsan` or `my-org` |
+| 本地 git 用户 / Local git user | `git config user.name` | `ZhangSan` |
+| GitHub 登录用户 / GitHub logged-in user | `gh api user --jq ".login"` | `zhangsan` |
+| 仓库所有者 / Repository owner | `gh repo view --json owner --jq ".owner.login"` | `zhangsan` 或 / or `my-org` |
+
+**匹配：** GitHub 登录用户（不区分大小写）等于仓库所有者 → **继续执行步骤 6 和步骤 7**（合并 + 发布）
 
 **Match:** GitHub logged-in user (case-insensitive) equals repository owner → **Continue to Step 6 and Step 7** (merge + release)
 
+**不匹配：** GitHub 登录用户与仓库所有者不同 → **立即停止。仅保留 PR。不合并、不发布。** 通知仓库所有者审核并合并。
+
 **Mismatch:** GitHub logged-in user differs from repository owner → **STOP immediately. Keep PR only. No merge, no release.** Notify the repository owner to review and merge.
 
-### Organization Repositories
+### 组织仓库 / Organization Repositories
+
+对于组织拥有的仓库，还需检查团队成员身份：
 
 For organization-owned repositories, also check team membership:
 
 ```bash
-# Check if current user is a member of the org
+# 检查当前用户是否为该组织成员 / Check if current user is a member of the org
 gh api orgs/<org-name>/members/<username> --silent 2>&1
-# Exit code 0 = member, non-zero = not a member
+# 退出码 0 = 成员，非零 = 非成员 / Exit code 0 = member, non-zero = not a member
 ```
+
+即使用户是组织成员，合并/发布仍需项目维护者的明确许可（通过 CODEOWNERS 审批或运行 Agent 的用户直接指示）。
 
 Even if the user is an org member, the merge/release is gated by the project maintainer's explicit permission (via CODEOWNERS approval or direct instruction from the user running the agent).
 
-### Actions on Mismatch
+### 不匹配时的操作 / Actions on Mismatch
 
+1. 在 PR 中添加评论 @仓库所有者，说明 PR 已准备好进行审核
 1. Add a PR comment @ the repository owner, explaining the PR is ready for review
+
+2. 向运行 Agent 的用户报告所有权不匹配情况
 2. Report the ownership mismatch to the user running the agent
+
+3. **禁止：** 自动执行 `gh pr merge` 或 `gh release create`
 3. **Prohibited:** Auto-executing `gh pr merge` or `gh release create`
 
-## Step 6: PR Merge (Only When Ownership Matches)
+## 步骤 6：PR 合并（仅在所有权匹配时）/ Step 6: PR Merge (Only When Ownership Matches)
+
+**前置条件：步骤 5 结果为"匹配"。否则跳过此步骤。**
 
 **Prerequisite: Step 5 result is "match". Otherwise, skip this step.**
 
@@ -561,18 +675,27 @@ gh pr merge <number> --merge --delete-branch
 git checkout main && git pull origin main
 ```
 
+合并策略遵循项目的偏好：
+
 Merge strategy follows the project's preference:
-- `--merge` — standard merge commit
-- `--squash` — squash all commits into one
-- `--rebase` — rebase on target branch
+
+- `--merge` — 标准合并提交 / standard merge commit
+- `--squash` — 将所有提交压缩为一个 / squash all commits into one
+- `--rebase` — 变基到目标分支 / rebase on target branch
+
+如果项目通过分支保护规则强制执行特定合并策略，则遵循该策略。
 
 If the project enforces a specific merge strategy via branch protection rules, follow that.
 
-## Step 7: Release (Only When Ownership Matches)
+## 步骤 7：发布（仅在所有权匹配时）/ Step 7: Release (Only When Ownership Matches)
+
+**前置条件：步骤 5 结果为"匹配"且步骤 6 已执行。否则跳过此步骤。**
 
 **Prerequisite: Step 5 result is "match" AND Step 6 has been executed. Otherwise, skip this step.**
 
-### Release Notes Format
+### 发布说明格式 / Release Notes Format
+
+遵循项目现有的发布说明格式。如不存在则使用以下格式：
 
 Follow the project's existing release notes format. If none exists:
 
@@ -590,88 +713,100 @@ Follow the project's existing release notes format. If none exists:
 See [CHANGELOG.md](CHANGELOG.md) for the full changelog.
 ```
 
-### Create Release
+### 创建发布 / Create Release
 
 ```bash
-# Write notes to file first (recommended for all shells)
+# 先将说明写入文件（推荐用于所有 Shell）/ Write notes to file first (recommended for all shells)
 gh release create vX.Y.Z --title "vX.Y.Z — Summary" --notes-file release-notes.md
 ```
 
-### Release Assets
+### 发布产物 / Release Assets
+
+如果项目构建可分发的产物：
 
 If the project builds distributable artifacts:
 
+1. 遵循项目的构建说明（通常在 `README.md`、`CONTRIBUTING.md` 或 `Makefile` 中）
 1. Follow the project's build instructions (usually in `README.md`, `CONTRIBUTING.md`, or `Makefile`)
+
+2. 使用项目的标准构建工具链构建产物
 2. Build artifacts using the project's standard build toolchain
+
+3. 上传资产：
 3. Upload assets:
 
 ```bash
 gh release upload vX.Y.Z "artifact-file" --clobber
 ```
 
+**常见构建/发布场景：**
+
 **Common build/publish scenarios:**
 
-| Ecosystem | Build Command | Publish |
+| 生态系统 / Ecosystem | 构建命令 / Build Command | 发布方式 / Publish |
 |-----------|---------------|---------|
 | npm | `npm run build` | `npm publish` |
 | PyPI | `python -m build` | `twine upload dist/*` |
 | Cargo | `cargo build --release` | `cargo publish` |
-| Go | `goreleaser release` | Automatic via goreleaser |
+| Go | `goreleaser release` | 通过 goreleaser 自动发布 / Automatic via goreleaser |
 | Docker | `docker build` | `docker push` |
-| GitHub Release | Build per project docs | `gh release upload` |
+| GitHub Release | 按项目文档构建 / Build per project docs | `gh release upload` |
 
-### Post-Release
+### 发布后 / Post-Release
 
+- 删除本地构建产物（zip、tar.gz 等）
 - Delete local build artifacts (zip, tar.gz, etc.)
+
+- 验证 GitHub 上的发布页面显示所有预期的资产
 - Verify the release page on GitHub shows all expected assets
+
+- 验证包注册表（如适用）显示新版本
 - Verify package registry (if applicable) shows the new version
 
-## Release Checklist
+## 发布检查清单 / Release Checklist
 
 ```
-- [ ] Searched and read project convention files
-- [ ] Version bumped according to project's versioning strategy
-- [ ] CHANGELOG updated (if project has one)
-- [ ] README version references updated (if applicable)
-- [ ] Line endings match project convention
-- [ ] PR created with --body-file
-- [ ] Ownership verification executed (Step 5)
-- [ ] Ownership match: PR merged, Release created, assets uploaded
-- [ ] Ownership mismatch: PR only, owner notified
-- [ ] Local build artifacts cleaned up
+- [ ] 已搜索并阅读项目规范文件 / Searched and read project convention files
+- [ ] 已按项目版本控制策略更新版本号 / Version bumped according to project's versioning strategy
+- [ ] 已更新 CHANGELOG（如果项目有的话）/ CHANGELOG updated (if project has one)
+- [ ] 已更新 README 中的版本引用（如适用）/ README version references updated (if applicable)
+- [ ] 行尾符合项目规范 / Line endings match project convention
+- [ ] 已使用 --body-file 创建 PR / PR created with --body-file
+- [ ] 已执行所有权验证（步骤 5）/ Ownership verification executed (Step 5)
+- [ ] 所有权匹配：已合并 PR、已创建 Release、已上传资产 / Ownership match: PR merged, Release created, assets uploaded
+- [ ] 所有权不匹配：仅创建 PR，已通知所有者 / Ownership mismatch: PR only, owner notified
+- [ ] 已清理本地构建产物 / Local build artifacts cleaned up
 ```
 
-## Common Pitfalls
+## 常见陷阱 / Common Pitfalls
 
-| Problem | Cause | Fix |
+| 问题 / Problem | 原因 / Cause | 修复方法 / Fix |
 |---------|-------|-----|
-| Release notes lose code snippets | Shell swallows backticks | Use `--notes-file` |
-| PR body shows literal `\n` | PowerShell doesn't parse `\n` | Use Here-String or file |
-| Batch files garbled | Wrong line endings | `.gitattributes` enforce CRLF |
-| Accidentally merge/release on someone else's repo | Skipped ownership check | Must execute Step 5 |
-| Wrong version bump | Ignored project's versioning strategy | Detect strategy from existing tags |
+| 发布说明丢失代码片段 / Release notes lose code snippets | Shell 吞掉了反引号 / Shell swallows backticks | 使用 `--notes-file` / Use `--notes-file` |
+| PR 正文显示字面量 `\n` / PR body shows literal `\n` | PowerShell 不解析 `\n` / PowerShell doesn't parse `\n` | 使用 Here-String 或文件 / Use Here-String or file |
+| 批处理文件乱码 / Batch files garbled | 行尾不正确 / Wrong line endings | `.gitattributes` 强制使用 CRLF / `.gitattributes` enforce CRLF |
+| 误在他人的仓库上合并/发布 / Accidentally merge/release on someone else's repo | 跳过了所有权检查 / Skipped ownership check | 必须执行步骤 5 / Must execute Step 5 |
+| 版本号更新错误 / Wrong version bump | 忽略了项目的版本控制策略 / Ignored project's versioning strategy | 从现有标签检测策略 / Detect strategy from existing tags |/n/n---
 
----
+# 开源许可证指南 / Open-Source License Guide
 
-# Open-Source License Guide
+## 选择许可证 / Choosing a License
 
-## Choosing a License
-
-| License | Type | Key Characteristics | Best For |
+| 许可证 / License | 类型 / Type | 关键特征 / Key Characteristics | 最适合 / Best For |
 |---------|------|---------------------|----------|
-| **MIT** | Permissive | Very short, allows everything | Libraries, tools, most projects |
-| **Apache 2.0** | Permissive | Includes patent grant | Corporate open-source, large projects |
-| **BSD 2-Clause** | Permissive | Similar to MIT, slightly different wording | Academic projects |
-| **BSD 3-Clause** | Permissive | BSD 2 + no-endorsement clause | Academic projects needing name protection |
-| **GPL-3.0** | Copyleft | Derivatives must be GPL-3.0 | Projects wanting to ensure openness |
-| **LGPL-3.0** | Weak copyleft | Linking allowed in proprietary code | Libraries wanting wide adoption + openness |
-| **AGPL-3.0** | Strong copyleft | Network use = distribution | Web services, SaaS |
-| **MPL-2.0** | File-level copyleft | Modified files must be open-source | Projects mixing open and proprietary |
-| **Unlicense / CC0** | Public domain | No restrictions | Releasing into public domain |
+| **MIT** | 宽松型 / Permissive | 非常简短，允许一切操作 / Very short, allows everything | 库、工具、大多数项目 / Libraries, tools, most projects |
+| **Apache 2.0** | 宽松型 / Permissive | 包含专利授权 / Includes patent grant | 企业开源、大型项目 / Corporate open-source, large projects |
+| **BSD 2-Clause** | 宽松型 / Permissive | 类似 MIT，措辞略有不同 / Similar to MIT, slightly different wording | 学术项目 / Academic projects |
+| **BSD 3-Clause** | 宽松型 / Permissive | BSD 2 + 禁止背书条款 / BSD 2 + no-endorsement clause | 需要名称保护的学术项目 / Academic projects needing name protection |
+| **GPL-3.0** | 著佐权 / Copyleft | 衍生作品必须使用 GPL-3.0 / Derivatives must be GPL-3.0 | 希望确保开放性的项目 / Projects wanting to ensure openness |
+| **LGPL-3.0** | 弱著佐权 / Weak copyleft | 允许在专有代码中链接 / Linking allowed in proprietary code | 希望广泛采用且保持开放的库 / Libraries wanting wide adoption + openness |
+| **AGPL-3.0** | 强著佐权 / Strong copyleft | 网络使用 = 分发 / Network use = distribution | Web 服务、SaaS / Web services, SaaS |
+| **MPL-2.0** | 文件级著佐权 / File-level copyleft | 修改的文件必须开源 / Modified files must be open-source | 混合开源和专有的项目 / Projects mixing open and proprietary |
+| **Unlicense / CC0** | 公有领域 / Public domain | 无任何限制 / No restrictions | 释放到公有领域 / Releasing into public domain |
 
-## Common License Templates
+## 常用许可证模板 / Common License Templates
 
-### MIT License
+### MIT 许可证 / MIT License
 
 ```
 MIT License
@@ -697,11 +832,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-### Apache License 2.0
+### Apache 许可证 2.0 / Apache License 2.0
+
+使用完整的标准 Apache 2.0 文本（可从 https://www.apache.org/licenses/LICENSE-2.0 获取）。如果项目需要归属声明，请添加 `NOTICE` 文件。
 
 Use the full standard Apache 2.0 text (available at https://www.apache.org/licenses/LICENSE-2.0). Add a `NOTICE` file if the project requires attribution notices.
 
-### BSD 3-Clause
+### BSD 3-条款 / BSD 3-Clause
 
 ```
 BSD 3-Clause License
@@ -736,6 +873,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ### GPL-3.0
 
+**不要**粘贴完整的 700 行法律文本。请使用简短声明模板：
+
 **Don't** paste the full 700-line legal text. Instead, write a short declaration:
 
 ```
@@ -759,9 +898,13 @@ with this program. If not, see <https://www.gnu.org/licenses/>.
 Full License Text: https://www.gnu.org/licenses/gpl-3.0.html
 ```
 
-## Source File Header
+## 源文件头 / Source File Header
+
+根据语言调整注释语法：Python `#`、JS/TS/C/C++/Java/Go `//`、Batch `REM`、HTML `<!-- -->`
 
 Adapt comment syntax per language: Python `#`, JS/TS/C/C++/Java/Go `//`, Batch `REM`, HTML `<!-- -->`
+
+**简短头部（推荐用于宽松许可证）：**
 
 **Short header (recommended for permissive licenses):**
 
@@ -769,6 +912,8 @@ Adapt comment syntax per language: Python `#`, JS/TS/C/C++/Java/Go `//`, Batch `
 # Copyright (c) <year> <copyright holder>
 # SPDX-License-Identifier: <SPDX-ID>
 ```
+
+**完整头部（推荐用于 GPL 等著佐权许可证）：**
 
 **Full header (recommended for copyleft licenses like GPL):**
 
@@ -790,26 +935,26 @@ Adapt comment syntax per language: Python `#`, JS/TS/C/C++/Java/Go `//`, Batch `
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ```
 
-## Common Mistakes
+## 常见错误 / Common Mistakes
 
-1. **Pasting full legal text** for GPL (700 lines) → Use the short declaration template
-2. **Missing "or later version"** for GPL → Must include `either version 3 of the License, or (at your option) any later version`
-3. **Confusing GPL and CC** → GPL is for software, CC is for creative works
-4. **No SPDX identifier** → Always add `SPDX-License-Identifier` in file headers for machine readability
-5. **Mixing incompatible licenses** → Verify license compatibility before combining code from different projects
+1. **粘贴 GPL 完整法律文本**（700 行）→ 使用简短声明模板 / **Pasting full legal text** for GPL (700 lines) → Use the short declaration template
+2. **GPL 缺少"或更高版本"** → 必须包含 `either version 3 of the License, or (at your option) any later version` / **Missing "or later version"** for GPL → Must include `either version 3 of the License, or (at your option) any later version`
+3. **混淆 GPL 和 CC** → GPL 用于软件，CC 用于创意作品 / **Confusing GPL and CC** → GPL is for software, CC is for creative works
+4. **没有 SPDX 标识符** → 始终在文件头中添加 `SPDX-License-Identifier` 以确保机器可读性 / **No SPDX identifier** → Always add `SPDX-License-Identifier` in file headers for machine readability
+5. **混合不兼容的许可证** → 在组合来自不同项目的代码之前验证许可证兼容性 / **Mixing incompatible licenses** → Verify license compatibility before combining code from different projects
 
-## References
+## 参考资料 / References
 
-- [SPDX License List](https://spdx.org/licenses/)
-- [Choose a License](https://choosealicense.com/)
-- [GPL-3.0 Official](https://www.gnu.org/licenses/gpl-3.0.html)
-- [How to Apply GPL](https://www.gnu.org/licenses/gpl-howto.html)
+- [SPDX 许可证列表 / SPDX License List](https://spdx.org/licenses/)
+- [选择许可证 / Choose a License](https://choosealicense.com/)
+- [GPL-3.0 官方 / GPL-3.0 Official](https://www.gnu.org/licenses/gpl-3.0.html)
+- [如何应用 GPL / How to Apply GPL](https://www.gnu.org/licenses/gpl-howto.html)
 
 ---
 
-# Common Development Scenarios
+# 常见开发场景 / Common Development Scenarios
 
-## Scenario 1: Fork Workflow (Contributing to Others' Projects)
+## 场景 1: Fork 工作流（为他人项目做贡献） / Scenario 1: Fork Workflow (Contributing to Others' Projects)
 
 ```
 1. Fork the repository
@@ -822,12 +967,15 @@ Adapt comment syntax per language: Python `#`, JS/TS/C/C++/Java/Go `//`, Batch `
 8. Ownership check will MISMATCH → PR only, no merge/release
 ```
 
-**Key rules for forks:**
-- Never push directly to the upstream repository
-- Keep your fork's default branch synced with upstream
-- Always create PRs from feature branches, not from your default branch
+**Fork 的关键规则：**
 
-## Scenario 2: Hotfix / Urgent Fix
+**Key rules for forks:**
+
+- 永远不要直接推送到上游仓库 / Never push directly to the upstream repository
+- 保持你的 fork 默认分支与上游同步 / Keep your fork's default branch synced with upstream
+- 始终从功能分支创建 PR，不要从默认分支创建 / Always create PRs from feature branches, not from your default branch
+
+## 场景 2: 热修复 / 紧急修复 / Scenario 2: Hotfix / Urgent Fix
 
 ```
 1. Create branch from the release tag or main: git checkout -b hotfix/fix-critical-bug v1.2.3
@@ -838,7 +986,7 @@ Adapt comment syntax per language: Python `#`, JS/TS/C/C++/Java/Go `//`, Batch `
 6. Cherry-pick fix to main branch if applicable
 ```
 
-## Scenario 3: Dependency Update
+## 场景 3: 依赖更新 / Scenario 3: Dependency Update
 
 ```
 1. Create branch: chore/update-react-19
@@ -850,7 +998,7 @@ Adapt comment syntax per language: Python `#`, JS/TS/C/C++/Java/Go `//`, Batch `
 7. Create PR with detailed changelog of breaking changes
 ```
 
-## Scenario 4: Monorepo Changes
+## 场景 4: Monorepo 变更 / Scenario 4: Monorepo Changes
 
 ```
 1. Identify affected packages
@@ -862,7 +1010,7 @@ Adapt comment syntax per language: Python `#`, JS/TS/C/C++/Java/Go `//`, Batch `
 7. Follow the monorepo's release tooling (changesets, lerna, nx, turborepo, etc.)
 ```
 
-## Scenario 5: Documentation-Only Changes
+## 场景 5: 仅文档变更 / Scenario 5: Documentation-Only Changes
 
 ```
 1. Create branch: docs/update-readme
@@ -873,7 +1021,7 @@ Adapt comment syntax per language: Python `#`, JS/TS/C/C++/Java/Go `//`, Batch `
 6. No version bump needed (unless project convention requires it)
 ```
 
-## Scenario 6: CI/CD Configuration Changes
+## 场景 6: CI/CD 配置变更 / Scenario 6: CI/CD Configuration Changes
 
 ```
 1. Create branch: ci/add-deploy-step
@@ -883,7 +1031,7 @@ Adapt comment syntax per language: Python `#`, JS/TS/C/C++/Java/Go `//`, Batch `
 5. Create PR — note that CI changes may require admin approval
 ```
 
-## Scenario 7: Large Refactoring
+## 场景 7: 大规模重构 / Scenario 7: Large Refactoring
 
 ```
 1. Discuss with maintainers first (open an issue or discussion)
@@ -894,7 +1042,7 @@ Adapt comment syntax per language: Python `#`, JS/TS/C/C++/Java/Go `//`, Batch `
 6. Ensure test coverage doesn't decrease
 ```
 
-## Scenario 8: Reverting a Bad Release
+## 场景 8: 回滚有问题的发布 / Scenario 8: Reverting a Bad Release
 
 ```
 1. Create branch: revert/bad-release
@@ -904,7 +1052,7 @@ Adapt comment syntax per language: Python `#`, JS/TS/C/C++/Java/Go `//`, Batch `
 5. For GitHub Release: edit or delete the bad release, create corrected one
 ```
 
-## Scenario 9: Adding a New Language / Framework to a Project
+## 场景 9: 为项目添加新语言 / 框架 / Scenario 9: Adding a New Language / Framework to a Project
 
 ```
 1. Open a discussion/issue first to get maintainer buy-in
@@ -914,7 +1062,9 @@ Adapt comment syntax per language: Python `#`, JS/TS/C/C++/Java/Go `//`, Batch `
 5. Add documentation for the new component
 ```
 
-## Scenario 10: Publishing a New Project
+## 场景 10: 发布新项目 / Scenario 10: Publishing a New Project
+
+从零开始创建和发布全新开源项目时：
 
 When creating and publishing a brand-new open-source project from scratch:
 
@@ -958,6 +1108,8 @@ When creating and publishing a brand-new open-source project from scratch:
     - Upload any distributable artifacts
 ```
 
+**新项目清单：**
+
 **New project checklist:**
 
 ```
@@ -977,11 +1129,15 @@ When creating and publishing a brand-new open-source project from scratch:
 
 ---
 
-# Agent Configuration Reference
+# Agent 配置参考 / Agent Configuration Reference
+
+本节帮助 AI Agent 在加载此技能时进行自我配置。
 
 This section helps AI agents configure themselves when loading this skill.
 
-## Auto-detection Checklist
+## 自动检测清单 / Auto-detection Checklist
+
+在开始处理新项目时，Agent 应该：
 
 When starting work on a new project, the agent should:
 
@@ -998,7 +1154,9 @@ When starting work on a new project, the agent should:
 10. [ ] Run ownership verification before merge/release (Section 4, Step 5)
 ```
 
-## Project Profile Template
+## 项目档案模板 / Project Profile Template
+
+Agent 可以为每个处理的项目填写此模板：
 
 The agent can fill in this template for each project it works on:
 
@@ -1018,22 +1176,24 @@ Merge strategy: merge | squash | rebase
 Convention files found: <list>
 ```
 
-## Universal Rules (Override Project Detection)
+## 通用规则（覆盖项目检测） / Universal Rules (Override Project Detection)
+
+无论项目检测结果如何，以下规则始终适用：
 
 These rules always apply regardless of project detection:
 
-1. **Never** output tool signatures or brand watermarks in project files
-2. **Never** commit secrets or sensitive information
-3. **Always** verify ownership before merge/release
-4. **Always** search convention files before making changes
-5. **Always** follow Conventional Commits unless the project explicitly uses a different format
-6. **Always** match existing code style in the files being modified
+1. **永远不要**在项目文件中输出工具签名或品牌水印 / **Never** output tool signatures or brand watermarks in project files
+2. **永远不要**提交密钥或敏感信息 / **Never** commit secrets or sensitive information
+3. **始终**在合并/发布前验证所有权 / **Always** verify ownership before merge/release
+4. **始终**在进行更改前搜索约定文件 / **Always** search convention files before making changes
+5. **始终**遵循约定式提交（Conventional Commits），除非项目明确使用其他格式 / **Always** follow Conventional Commits unless the project explicitly uses a different format
+6. **始终**匹配正在修改的文件中的现有代码风格 / **Always** match existing code style in the files being modified
 
-## References
+## 参考资料 / References
 
-- [Conventional Commits](https://www.conventionalcommits.org/)
-- [Semantic Versioning](https://semver.org/)
-- [Keep a Changelog](https://keepachangelog.com/)
-- [GitHub CLI Manual](https://cli.github.com/manual/)
-- [SPDX License List](https://spdx.org/licenses/)
-- [Choose a License](https://choosealicense.com/)
+- [约定式提交 / Conventional Commits](https://www.conventionalcommits.org/)
+- [语义化版本 / Semantic Versioning](https://semver.org/)
+- [维护变更日志 / Keep a Changelog](https://keepachangelog.com/)
+- [GitHub CLI 手册 / GitHub CLI Manual](https://cli.github.com/manual/)
+- [SPDX 许可证列表 / SPDX License List](https://spdx.org/licenses/)
+- [选择许可证 / Choose a License](https://choosealicense.com/)/n
