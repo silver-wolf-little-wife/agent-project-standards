@@ -14,7 +14,7 @@ Covers seven core sections:
 3. [Shell CLI Multi-line Text Handling](#shell-cli-multi-line-text-handling)
 4. [Release Workflow with Ownership Verification](#release-workflow-with-ownership-verification)
 5. [Open-Source License Guide](#open-source-license-guide)
-6. [Common Development Scenarios](#common-development-scenarios)
+6. [Common Development Scenarios](#common-development-scenarios) (10 scenarios including publishing new projects)
 7. [Agent Configuration Reference](#agent-configuration-reference)
 
 ---
@@ -912,6 +912,67 @@ Adapt comment syntax per language: Python `#`, JS/TS/C/C++/Java/Go `//`, Batch `
 3. Add CI steps for the new language's build/test pipeline
 4. Follow the existing project's directory structure conventions
 5. Add documentation for the new component
+```
+
+## Scenario 10: Publishing a New Project
+
+When creating and publishing a brand-new open-source project from scratch:
+
+```
+1. Initialize git repo: git init && git checkout -b main
+2. Set up .gitignore for your language/ecosystem
+3. Add LICENSE file (see License Guide section)
+4. Write README.md:
+   - Project name and one-line description
+   - Installation / quickstart instructions
+   - Usage examples
+   - License badge and link
+5. Add source code with license headers on every file
+6. Set up linter/formatter config for your ecosystem:
+   - JS/TS: .eslintrc / biome.json / .prettierrc + editorconfig
+   - Python: pyproject.toml / ruff.toml / .flake8
+   - Rust: rustfmt.toml + clippy config
+   - Go: golangci.yml
+   - Other: ecosystem-appropriate tooling
+7. Add CONTRIBUTING.md with:
+   - How to set up the dev environment
+   - How to run tests
+   - Commit message format (Conventional Commits recommended)
+   - PR process and review expectations
+8. Add CODE_OF_CONDUCT.md (e.g., Contributor Covenant)
+9. Set up CI/CD pipeline:
+   - GitHub Actions / GitLab CI / etc.
+   - At minimum: lint + test on PR
+   - Optional: auto-release, coverage reporting
+10. Configure .github/ directory:
+    - ISSUE_TEMPLATE/ (bug report, feature request)
+    - PULL_REQUEST_TEMPLATE.md
+    - CODEOWNERS (if multi-maintainer)
+11. Initial commit: chore: initial project setup
+12. Create GitHub repo:
+    gh repo create <name> --public --description "<description>"
+13. Push: git remote add origin <url> && git push -u origin main
+14. (Optional) Create initial release:
+    - Tag: v0.1.0 or v1.0.0
+    - Release notes describing the initial offering
+    - Upload any distributable artifacts
+```
+
+**New project checklist:**
+
+```
+- [ ] .gitignore covers all build artifacts, secrets, OS files
+- [ ] LICENSE file present with correct year and copyright holder
+- [ ] README.md has description, install, usage, and license info
+- [ ] All source files have license headers
+- [ ] Linter/formatter configured and passing
+- [ ] CONTRIBUTING.md describes how to contribute
+- [ ] CODE_OF_CONDUCT.md present
+- [ ] CI pipeline runs lint + test on every PR
+- [ ] GitHub issue/PR templates configured
+- [ ] Initial commit pushed to main branch
+- [ ] Repository description and topics set on GitHub
+- [ ] No secrets, credentials, or personal data in any file
 ```
 
 ---
