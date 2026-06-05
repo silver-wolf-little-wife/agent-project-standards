@@ -12,6 +12,7 @@ Desktop.ini
 
 # Archives
 *.zip
+!dist/*.zip
 *.tar.gz
 *.rar
 
