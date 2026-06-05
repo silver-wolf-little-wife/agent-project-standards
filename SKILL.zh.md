@@ -595,6 +595,27 @@ git checkout main && git pull origin main
 
 **前置条件：步骤 5 结果为"匹配"且步骤 6 已执行。否则跳过此步骤。**
 
+> **⚠️ 强制规则：所有权验证通过后，必须检查本次修改是否影响了上一个 Release 的 assets 中包含的文件。如果影响了，必须强制发布新 Release。**
+
+### 检测本次修改是否影响 Release Assets（强制）
+
+所有权验证通过后，在执行发布前，必须先判断本次变更是否修改了上一个 Release 的 assets 中包含的源文件：
+
+```bash
+# 1. 获取本次变更涉及的文件（合并后在 main 上执行）
+git diff HEAD~1 --name-only
+
+# 2. 查看上一个 Release 的 assets 列表
+gh release view --json assets --jq ".assets[].name"
+```
+
+**判定规则：**
+
+- 如果本次变更修改的文件属于上一个 Release assets 中的产物源文件（如 `.zip`、`.tar.gz` 等打包产物所包含的源文件） → **必须发布新 Release，不可跳过**
+- 如果本次变更未涉及 assets 中的文件（如仅修改了 CI 配置、`.gitignore`、与产物无关的文档等） → 可跳过发布
+
+**常见触发场景：** 项目的 `SKILL.md`、`LICENSE` 等被打包进 Release 的 `.zip` 产物中，修改这些文件即触发强制发布。
+
 ### 检查之前发布的 Assets（创建新 Release 前必须执行）
 
 > **在创建新 Release 之前，必须先查询之前发布的 assets 列表，确保新 Release 不会遗漏任何预期的产物。**
@@ -687,6 +708,7 @@ gh release view vX.Y.Z --json assets --jq ".assets[].name"
 - [ ] 行尾符合项目规范
 - [ ] 已使用 --body-file 创建 PR
 - [ ] 已执行所有权验证（步骤 5）
+- [ ] 已检测本次修改是否影响上一个 Release 的 assets 文件（影响则强制发布）
 - [ ] 已检查之前 Release 的 assets 列表
 - [ ] 所有权匹配：已合并 PR、已创建 Release、已上传资产
 - [ ] 已验证新 Release 的 assets 与之前 Release 一致（数量和内容）
@@ -706,6 +728,7 @@ gh release view vX.Y.Z --json assets --jq ".assets[].name"
 | 误在他人的仓库上合并/发布 | 跳过了所有权检查 | 必须执行步骤 5 |
 | 版本号更新错误 | 忽略了项目的版本控制策略 | 从现有标签检测策略 |
 | 新 Release 遗漏 assets | 未检查之前 Release 的 assets 列表 | 发布前用 `gh release view --json assets` 对比 |
+| 修改了 assets 源文件但未发新 Release | 未执行资产变更检测 | 所有权通过后必须执行 `git diff HEAD~1 --name-only` 对比 assets 文件 |
 | 本地分支未清理 | 只删除了远程分支，忘记删除本地分支 | 合并后立即执行 `git branch -d <branch>` |
 
 ---
