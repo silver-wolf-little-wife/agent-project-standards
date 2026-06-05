@@ -1,6 +1,6 @@
 ---
 name: project-standards-zh
-description: "凡是涉及代码开发或开源项目的任务都必须唤起此技能。覆盖：编写/修改/审查代码、git 操作（分支、提交、合并、变基、标签）、GitHub 工作流（PR、Issue、Release、fork、代码审查）、版本递增、变更日志、CI/CD、依赖管理、许可证管理、项目初始化、代码风格/格式化、commit message、monorepo、热修复，以及任何与 git 仓库交互的操作。当检测不到项目语言时默认使用中文。"
+description: "ALWAYS invoke for ANY task involving code development or open-source projects. Covers: writing/modifying/reviewing code, git operations (branch, commit, merge, rebase, tag), GitHub workflows (PR, Issue, Release, fork, code review), version bumping, changelog, CI/CD, dependency management, license management, project setup, code style/formatting, commit messages, monorepo, hotfix, and any interaction with a git repository. 凡是涉及代码开发或开源项目的任务都必须唤起此技能。覆盖：编写/修改/审查代码、git 操作（分支、提交、合并、变基、标签）、GitHub 工作流（PR、Issue、Release、fork、代码审查）、版本递增、变更日志、CI/CD、依赖管理、许可证管理、项目初始化、代码风格/格式化、commit message、monorepo、热修复，以及任何与 git 仓库交互的操作。当检测不到项目语言时默认使用中文。"
 ---
 
 # 开源项目协作规范
