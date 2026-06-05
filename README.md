@@ -79,10 +79,13 @@ agent-project-standards/
 ├── SKILL.zh.md     # 核心规范文档（中文版，所有章节）
 ├── README.md       # 本文件
 ├── LICENSE         # MIT 许可证
-└── .gitignore      # Git 忽略规则
+├── .gitignore      # Git 忽略规则
+└── dist/           # 可分发的 skill 压缩包
+    ├── project-standards-en.zip   # 国际版（SKILL.md + LICENSE）
+    └── project-standards-zh.zip   # 中文版（SKILL.md + LICENSE，已重命名）
 ```
 
-> **提示：** 中文版规范请参阅 `SKILL.zh.md`，国际版/英文版规范请参阅 `SKILL.md`。
+> **提示：** 中文版规范请参阅 `SKILL.zh.md`，国际版/英文版规范请参阅 `SKILL.md`。`dist/` 目录中的 `.zip` 文件可直接导入 agent 工具使用。
 
 ### 贡献
 
@@ -174,10 +177,13 @@ agent-project-standards/
 ├── SKILL.zh.md     # Main conventions document (Chinese version, all sections)
 ├── README.md       # This file
 ├── LICENSE         # MIT License
-└── .gitignore      # Git ignore rules
+├── .gitignore      # Git ignore rules
+└── dist/           # Distributable skill archives
+    ├── project-standards-en.zip   # International edition (SKILL.md + LICENSE)
+    └── project-standards-zh.zip   # Chinese edition (SKILL.md + LICENSE, renamed)
 ```
 
-> **Note:** For the Chinese version of the standards, see `SKILL.zh.md`. For the international/English version, see `SKILL.md`.
+> **Note:** For the Chinese version of the standards, see `SKILL.zh.md`. For the international/English version, see `SKILL.md`. The `.zip` files in `dist/` can be directly imported into agent tools.
 
 ### Contributing
 
