@@ -312,11 +312,55 @@ The following should NOT appear in feature/fix PRs (unless they are the PR's pur
 
 ### 2.4 测试与质量 / Testing and Quality
 
-- 确保修改后的代码通过项目的现有测试 / Ensure modified code passes the project's existing tests
-- 新功能应包含相应的测试用例 / New features should include corresponding test cases
-- 缺陷修复最好添加回归测试 / Bug fixes should preferably add regression tests
-- 提交前运行项目现有的 lint/format 检查 / Run the project's existing lint/format checks before committing
-- 不要降低现有的测试覆盖率 / Don't reduce existing test coverage
+> **⚠️ EXTREMELY IMPORTANT: The following verification steps MUST NOT be omitted. They must be strictly executed before every code upload and PR creation. Skipping this step may cause serious issues to be introduced into production.**
+>
+> **⚠️ 极其重要：以下验证步骤不可省略，必须在每次上传代码和创建PR前严格执行。跳过此步骤可能导致严重问题被引入生产环境。**
+
+**First round of verification (after coding, before committing):**
+
+**第一轮验证（编码完成后、提交前）：**
+
+1. **Type check (MANDATORY)**: Run the project's type check command (e.g., `npm run typecheck`, `tsc --noEmit`, `mypy`, `cargo check`, `go vet`, etc.)
+   **类型检查（必须）**：运行项目的类型检查命令
+
+2. **Lint check (MANDATORY)**: Run the project's lint command (e.g., `npm run lint`, `ruff check`, `cargo clippy`, `golangci-lint run`, etc.)
+   **Lint 检查（必须）**：运行项目的 lint 命令
+
+3. **Test suite (MANDATORY)**: Run the project's full test suite (e.g., `npm test`, `pytest`, `cargo test`, `go test ./...`, etc.)
+   **测试套件（必须）**：运行项目的完整测试套件
+
+4. **Fix all errors**: If any check fails, MUST fix and re-run until all pass
+   **修复所有错误**：如果任何检查失败，必须修复后重新运行，直到全部通过
+
+**Second round of verification (after all modifications, before uploading):**
+
+**第二轮验证（所有修改完成后、上传前）：**
+
+> **⚠️ MANDATORY: After all code modifications are complete and before executing `git push` or creating a PR, you MUST re-run the type check and full test suite. This is the last line of defense against issues introduced during modifications.**
+>
+> **⚠️ 强制要求：在所有代码修改完成后、执行 git push 或创建 PR 之前，必须再次完整运行类型检查和全部测试套件。这是防止修改过程中引入新问题的最后防线。**
+
+1. **Re-run type check**: Confirm all modified code types are correct
+   **重新运行类型检查**：确认所有修改后的代码类型正确
+
+2. **Re-run full test suite**: Confirm all tests (including new and existing tests) pass
+   **重新运行完整测试套件**：确认所有测试全部通过
+
+3. **Double confirmation**: Only proceed with upload after both rounds of verification pass
+   **双重确认**：只有两轮验证全部通过，才可执行上传操作
+
+**Ongoing requirements:**
+
+**持续要求：**
+
+- New features should include corresponding test cases
+  新功能应包含相应的测试用例
+- Bug fixes MUST add regression tests
+  缺陷修复必须添加回归测试
+- Don't reduce existing test coverage
+  不要降低现有的测试覆盖率
+- If the project has format checks (e.g., `npm run format:check`), they must also pass
+  如果项目有 format 检查，也需通过
 
 ### 2.5 沟通规范 / Communication Standards
 
@@ -375,10 +419,10 @@ Before submitting any commit or creating a PR, confirm:
       代码风格与项目已有风格一致
 - [ ] No unrelated changes
       无无关变更
-- [ ] Tests pass
-      测试通过
-- [ ] Lint/format checks pass
-      Lint/格式检查通过
+- [ ] ⚠️ First round of verification completed (Type check + Lint + All tests pass)
+      ⚠️ 已完成第一轮验证（类型检查 + Lint + 全部测试通过）
+- [ ] ⚠️ Second round of verification completed (Re-run type check + All tests after all modifications)
+      ⚠️ 已完成第二轮验证（所有修改完成后再次运行类型检查 + 全部测试通过）
 - [ ] New files have license headers
       新文件有许可证头部
 - [ ] No sensitive information leaked
@@ -583,6 +627,16 @@ Implement fixes or features. Follow the project's line ending and encoding conve
 **提交信息：** 遵循[约定式提交](#12-commit-message-format)。
 
 **Commit message:** Follow [Conventional Commits](#12-commit-message-format).
+
+> **⚠️ EXTREMELY IMPORTANT: Final Verification (MANDATORY, cannot be omitted or skipped)**
+>
+> Before executing `git push` or creating a PR, you MUST complete the following final verification. This is the last line of defense against issues introduced during modifications — **NEVER skip this step**:
+>
+> 1. **Re-run type check**: Confirm all modified code types are correct (e.g., `npm run typecheck`, `tsc --noEmit`)
+> 2. **Re-run full test suite**: Confirm all tests (including new and existing tests) pass (e.g., `npm test`, `pytest`)
+> 3. **Only proceed with commit and push after all checks pass**
+>
+> If verification fails, MUST fix the issues and re-verify until all pass.
 
 ## 步骤 4：创建 PR / Step 4: Create PR
 
@@ -841,6 +895,10 @@ gh release view vX.Y.Z --json assets --jq ".assets[].name"
 ## 发布检查清单 / Release Checklist
 
 ```
+- [ ] ⚠️ First round of verification completed (Type check + Lint + All tests pass)
+      ⚠️ 已完成第一轮验证（类型检查 + Lint + 全部测试通过）
+- [ ] ⚠️ Second round of verification completed (Re-run type check + All tests after all modifications)
+      ⚠️ 已完成第二轮验证（所有修改完成后再次运行类型检查 + 全部测试通过）
 - [ ] 已搜索并阅读项目规范文件 / Searched and read project convention files
 - [ ] 已按项目版本控制策略更新版本号 / Version bumped according to project's versioning strategy
 - [ ] 已更新 CHANGELOG（如果项目有的话）/ CHANGELOG updated (if project has one)
